@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecureSync To-Do List</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        /* Variabel CSS untuk palet warna DeepMind-ish */
+        :root {
+            --dm-black: #050505; /* Black yang sangat gelap */
+            --dm-dark-gray: #1A1A1A; /* Latar belakang elemen seperti card */
+            --dm-light-gray: #B0B0B0; /* Teks default yang lembut */
+            --dm-white: #FFFFFF; /* Teks judul, highlight */
+            --dm-accent-blue: #007bff; /* Biru standar Bootstrap untuk aksen */
+            --dm-accent-purple: #6F42C1; /* Ungu gelap untuk aksien */
+            --dm-border-color: #333333; /* Warna border halus */
+            --dm-gradient-start: #6A11CB; /* Ungu untuk gradien */
+            --dm-gradient-end: #2575FC;   /* Biru untuk gradien */
+            --dm-nav-item-hover-bg: #2B2B2B; /* Latar belakang hover baru, sedikit lebih terang dari dark-gray */
+            --dm-nav-item-hover-border: #444444; /* Border halus saat hover */
+            --dm-active-shadow-color: rgba(0, 123, 255, 0.7); /* Warna bayangan aktif lebih pekat */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dm-black); /* Latar belakang dasar */
+            color: var(--dm-light-gray); /* Warna teks default */
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden; /* Mencegah scroll horizontal */
+            min-height: 100vh; /* Memastikan body mengisi seluruh tinggi viewport */
+            display: flex; /* Menggunakan flexbox untuk layout utama */
+            flex-direction: column; /* Mengatur item flex secara kolom */
+            
+            /* Latar belakang global untuk body, akan terlihat di belakang navbar */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), /* Overlay gelap */
+                              url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD09IjAgMCAxMjAwIDYwMCI+CiAgICA8ZGVmcz4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWTDPSJncml2aXR5R215Z3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjNjE2QkY0IiBvZmZzZXQ9IjUwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIxMDAlIi8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDwvZGVmcz4KICAgIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwNTA1MDUiLz4KICAgIDxwYXRoIGQ9Ik0wIDBMMjAwIDYwMEwxMDAwIDYwMEwxMjAwIDBaTTQwMCAwTDYwMCA2MDBMODAwIDYwMEwxMDAwIDBaIiBmaWxsPSJ1cmwoI2dtaUdyYWRpZW50KSIgZmlsbC1vcGFjaXR5PSIwLjE1Ii8+CiAgICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI0MDAiIHI9IjE1MCIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CiAgICA8Y2lyY2xlIGN4PSIxMDAwIiBjeT0iMTUwIiByPSIxMDAiIGZpbGw9InVybCgjZ21pR3JhZGllbnQpIiBmaWxsLW9wYWNpdHk9IjAuMjUiLz4KICAgIDxwYXRoIGQ9Ik01MDAgNTBMMjEwMCA1NTBMMjgwMCAwWiIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==');
+            background-size: cover;
+            background-attachment: fixed; /* Membuat background tetap saat scroll */
+            background-position: center center;
+            padding-top: 100px; /* Tambahkan padding ke body untuk mengkompensasi fixed navbar */
+            scroll-behavior: smooth; /* Tambahkan ini untuk smooth scrolling */
+        }
+
+        /* Menyesuaikan text-info agar kontras pada background gelap (dari Bootstrap) */
+        .text-info {
+            color: var(--dm-accent-blue) !important;
+        }
+
+        /* Navbar khusus */
+        .navbar-custom {
+            background-color: var(--dm-dark-gray) !important; /* Navbar sedikit lebih terang dari background body */
+            border: 1px solid var(--dm-border-color); /* Border untuk navbar keseluruhan */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7); /* Bayangan lebih kuat untuk navbar */
+            padding: 0.5rem 0.5rem; /* Padding navbar disesuaikan */
+            border-radius: 20px; /* Sudut membulat untuk navbar itu sendiri */
+            margin: 15px auto; /* Margin auto untuk pusat di tengah, lebih turun sedikit */
+            max-width: fit-content; /* Navbar akan menyesuaikan lebar kontennya */
+            display: flex; /* Menggunakan flexbox untuk penempatan item */
+            justify-content: center; /* Pusat item secara horizontal */
+            align-items: center; /* Pusat item secara vertikal */
+            min-width: 200px; /* Pastikan navbar tidak terlalu kecil */
+            position: fixed; /* Membuat navbar fixed */
+            top: 20px; /* Posisi sedikit ke bawah dari atas */
+            left: 50%; /* Pusat secara horizontal */
+            transform: translateX(-50%); /* Menyesuaikan posisi tengah */
+            z-index: 1030; /* Pastikan navbar di atas konten lain */
+            width: auto; /* Agar max-width fit-content bekerja */
+        }
+        
+        /* Sembunyikan brand text/logo */
+        .navbar-custom .navbar-brand {
+            display: none; 
+        }
+
+        .navbar-nav {
+            flex-direction: row; /* Pastikan item navigasi sejajar horizontal */
+            align-items: center; /* Pastikan item sejajar vertikal */
+            margin: 0 !important; /* Hapus margin default ul */
+            padding: 0 !important; /* Hapus padding default ul */
+        }
+
+        .navbar-nav .nav-item {
+            margin: 0 5px; /* Spasi antar item navigasi, sedikit lebih rapat */
+        }
+
+        /* Gaya untuk link navigasi (default) */
+        .navbar-custom .nav-link {
+            color: var(--dm-light-gray) !important; /* Teks navlink default abu-abu terang */
+            font-weight: 600;
+            padding: 0.6rem 1.4rem !important; /* Padding navlink yang disesuaikan */
+            border-radius: 50px; /* Bentuk pil default */
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi lebih cepat dan halus */
+            border: 1px solid transparent; /* Border transparan default */
+            display: flex; /* Memastikan padding konsisten */
+            align-items: center; /* Memastikan teks di tengah */
+            justify-content: center; /* Memastikan teks di tengah */
+        }
+
+        /* Gaya untuk link navigasi saat di-hover */
+        .navbar-custom .nav-link:hover {
+            color: var(--dm-white) !important; /* Efek hover menjadi putih */
+            background-color: var(--dm-nav-item-hover-bg) !important; /* Latar belakang abu-abu gelap saat hover */
+            border-color: var(--dm-nav-item-hover-border) !important; /* Border halus saat hover */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Bayangan kecil dan halus saat hover */
+            transform: translateY(-1px); /* Sedikit lift saat hover */
+        }
+
+        /* Gaya untuk navigasi aktif (yang dipilih) */
+        .navbar-nav .nav-item .nav-link.active {
+            background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end)) !important;
+            color: var(--dm-white) !important;
+            border-radius: 50px !important; /* Bentuk pil */
+            padding: 0.6rem 1.6rem !important; /* Padding lebih lebar untuk pil aktif */
+            box-shadow: 0 5px 20px var(--dm-active-shadow-color); /* Bayangan yang lebih menonjol untuk item aktif */
+            transform: translateY(-1px);
+            border: 1px solid var(--dm-accent-blue) !important; /* Border untuk item aktif */
+        }
+
+        /* Wrapper untuk konten utama (agar terpusat) */
+        .content-wrapper {
+            flex-grow: 1; /* Memastikan wrapper ini mengisi ruang yang tersisa */
+            width: 100%; /* Mengambil lebar penuh */
+            max-width: 1200px; /* Lebar maksimum yang konsisten */
+            margin-left: auto; /* Memusatkan secara horizontal */
+            margin-right: auto; /* Memusatkan secara horizontal */
+            padding: 1.5rem; /* Padding horizontal dan vertikal */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Memusatkan konten di tengah */
+        }
+
+        /* Kustomisasi alert Bootstrap untuk tema gelap */
+        .alert-flash { /* Kelas baru untuk alert flash */
+            background-color: var(--dm-dark-gray) !important; /* Latar belakang mirip navbar */
+            color: var(--dm-white) !important; /* Teks putih agar terbaca */
+            border: 1px solid var(--dm-border-color) !important;
+            border-radius: 10px !important; /* Membulat */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important; /* Bayangan */
+            padding: 1rem 1.5rem !important;
+            margin: 20px auto !important; /* Tengah horizontal */
+            max-width: 500px; /* Lebar maksimum agar tidak terlalu panjang */
+            text-align: center; /* Teks di tengah */
+            font-weight: 600;
+            display: block; /* Memastikan margin auto bekerja */
+        }
+        /* Override warna spesifik alert Bootstrap agar tetap terbaca */
+        .alert-success { background-color: #008000 !important; border-color: #006400 !important; } /* Hijau gelap */
+        .alert-info { background-color: #0056b3 !important; border-color: #003d7a !important; } /* Biru gelap */
+        .alert-warning { background-color: #8B4513 !important; border-color: #69340f !important; } /* Coklat gelap */
+        .alert-danger { background-color: #8B0000 !important; border-color: #6a0000 !important; } /* Merah gelap */
+        /* Pastikan teks tetap putih di alert yang override warnanya */
+        .alert-success, .alert-info, .alert-warning, .alert-danger {
+            color: var(--dm-white) !important;
+        }
+
+
+        /* General styling for cards (login, register, features) */
+        .card {
+            background-color: var(--dm-dark-gray) !important; /* Latar belakang card */
+            color: var(--dm-light-gray); /* Teks card */
+            border: 1px solid var(--dm-border-color);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Bayangan card lebih kuat */
+            border-radius: 15px !important;
+        }
+
+        .card-title {
+            color: var(--dm-white) !important; /* Judul card putih */
+            font-weight: 800 !important; /* Sangat tebal */
+        }
+        .card-text {
+            color: var(--dm-light-gray) !important;
+        }
+
+        /* Form control styling */
+        .form-label {
+            color: var(--dm-light-gray); /* Label form */
+            font-weight: 600;
+        }
+
+        .form-control {
+            background-color: var(--dm-black) !important; /* Input field sangat gelap */
+            color: var(--dm-white) !important; /* Teks input putih */
+            border: 1px solid var(--dm-border-color) !important;
+            border-radius: 8px !important; /* Sedikit kurang bulat */
+            padding: 0.75rem 1rem !important; /* Padding lebih banyak */
+        }
+
+        .form-control:focus {
+            border-color: var(--dm-accent-blue) !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5) !important; /* Shadow focus biru */
+            background-color: var(--dm-black) !important; /* Tetap gelap saat fokus */
+        }
+        .form-control::placeholder {
+            color: #888; /* Warna placeholder */
+            opacity: 0.7;
+        }
+
+
+        /* Button styling */
+        .btn-primary {
+            background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end)) !important;
+            border: none !important;
+            color: var(--dm-white) !important;
+            font-weight: 700 !important;
+            padding: 0.8rem 2rem;
+            border-radius: 10px !important; /* Sedikit kurang bulat dari pil */
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5) !important; /* Bayangan hover biru */
+        }
+
+        .btn-outline-light {
+            color: var(--dm-accent-blue) !important;
+            border-color: var(--dm-accent-blue) !important;
+            font-weight: 700 !important;
+            padding: 0.8rem 2rem;
+            border-radius: 10px !important;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-light:hover {
+            background-color: var(--dm-accent-blue) !important;
+            color: var(--dm-white) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5) !important;
+        }
+
+        .btn-info { /* Tombol share */
+            background-color: var(--dm-accent-purple) !important;
+            border-color: var(--dm-accent-purple) !important;
+            color: var(--dm-white) !important;
+            font-weight: 600 !important;
+        }
+        .btn-info:hover {
+            background-color: #5d33a1 !important; /* sedikit lebih gelap */
+            border-color: #5d33a1 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.4) !important;
+        }
+
+        .btn-danger {
+            font-weight: 600 !important;
+        }
+
+        /* List group styling */
+        .list-group { /* Override list-group Bootstrap */
+            --bs-list-group-bg: var(--dm-dark-gray);
+            --bs-list-group-border-color: var(--dm-border-color);
+            --bs-list-group-color: var(--dm-white);
+            --bs-list-group-action-hover-bg: var(--dm-black);
+            --bs-list-group-action-active-bg: var(--dm-black);
+            --bs-list-group-action-active-color: var(--dm-white);
+            border-radius: 15px; /* Sudut membulat untuk list group */
+        }
+        .list-group-item {
+            background-color: var(--dm-dark-gray) !important;
+            border-color: var(--dm-border-color) !important;
+            color: var(--dm-white) !important;
+        }
+        .list-group-item a {
+            color: var(--dm-accent-blue) !important;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .list-group-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table styling */
+        .table {
+            --bs-table-bg: var(--dm-dark-gray);
+            --bs-table-color: var(--dm-light-gray);
+            --bs-table-border-color: var(--dm-border-color);
+            color: var(--dm-light-gray);
+            border: 1px solid var(--dm-border-color);
+            border-radius: 15px; /* Sudut membulat untuk tabel */
+            overflow: hidden; /* Penting untuk border-radius di tabel */
+        }
+        .table th, .table td {
+            border-color: var(--dm-border-color) !important;
+            padding: 0.75rem;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: var(--dm-black) !important; /* Row ganjil lebih gelap */
+        }
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: var(--dm-dark-gray) !important; /* Row genap */
+        }
+        .table thead {
+            background-color: var(--dm-accent-purple) !important;
+            color: var(--dm-white);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse justify-content-center">
+                <ul class="navbar-nav">
+                    {# Link Home, aktif jika di halaman home #}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}#top">Home</a>
+                    </li>
+                    {# Services dan About Us link, selalu terlihat #}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'home' and request.fragment == 'services-section' %}active{% endif %}" href="{{ url_for('home') }}#services-section">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'home' and request.fragment == 'about-section' %}active{% endif %}" href="{{ url_for('home') }}#about-section">About Us</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">Dashboard</a>
+                        </li>
+                        {% if current_user.role == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'admin_panel' %}active{% endif %}" href="{{ url_for('admin_panel') }}">Admin Panel</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'login' %}active{% endif %}" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'register' %}active{% endif %}" href="{{ url_for('register') }}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid main-content-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="d-flex justify-content-center w-100">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-flash">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

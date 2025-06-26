@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Dashboard {{ current_user.username }}</h2>
+    <hr>
+    <h3>To-Do List Milik Saya <a href="{{ url_for('create_todo') }}" class="btn btn-primary btn-sm ms-3">Buat Baru</a></h3>
+    {% if owned_lists %}
+        <ul class="list-group mb-4">
+            {% for todo_list in owned_lists %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('todo_detail', todo_id=todo_list.id) }}">{{ todo_list.name }}</a>
+                    <div>
+                        <a href="{{ url_for('share_todo', todo_id=todo_list.id) }}" class="btn btn-info btn-sm me-2">Share</a>
+                        <form action="{{ url_for('delete_todo', todo_id=todo_list.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus To-Do List ini dan semua tugasnya?');">Hapus</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Anda belum memiliki To-Do List. <a href="{{ url_for('create_todo') }}">Buat yang pertama!</a></p>
+    {% endif %}
+
+    <h3>To-Do List yang Dibagikan kepada Saya</h3>
+    {% if shared_lists %}
+        <ul class="list-group">
+            {% for todo_list in shared_lists %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('todo_detail', todo_id=todo_list.id) }}">{{ todo_list.name }}</a>
+                    <span class="badge bg-secondary">{{ todo_list.owner.username }} (Owner)</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Belum ada To-Do List yang dibagikan kepada Anda.</p>
+    {% endif %} {# <--- INI DIA YANG HILANG! #}
+{% endblock %}
