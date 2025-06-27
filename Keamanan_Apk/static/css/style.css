@@ -1,0 +1,600 @@
+        /* Variabel CSS untuk palet warna DeepMind-ish */
+        :root {
+            --dm-black: #050505;
+            --dm-dark-gray: #1A1A1A;
+            --dm-light-gray: #B0B0B0;
+            --dm-white: #FFFFFF;
+            --dm-accent-blue: #007bff;
+            --dm-accent-purple: #6F42C1;
+            --dm-border-color: #333333;
+            --dm-gradient-start: #6A11CB;
+            --dm-gradient-end: #2575FC;
+            --dm-nav-item-hover-bg: #2B2B2B; /* Warna ini tidak akan digunakan untuk background hover */
+            --dm-nav-item-hover-border: rgba(0, 123, 255, 0.5); /* Border transparan biru saat hover */
+            --dm-active-shadow-color: rgba(0, 123, 255, 0.7);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dm-black);
+            color: var(--dm-light-gray);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            
+            /* Latar belakang global untuk body */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                              url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD09IjAgMCAxMjAwIDYwMCI+CiAgICA8ZGVmcz4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWTDPSJncml2aXR5R215Z3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjNjE2QkY0IiBvZmZzZXQ9IjUwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIxMDAlIi8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDwvZGVmcz4KICAgIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwNTA1MDUiLz4KICAgIDxwYXRoIGQ9Ik0wIDBMMjAwIDYwMEwxMDAwIDYwMEwxMjAwIDBaTTQwMCAwTDYwMCA2MDBMODAwIDYwMEwxMDAwIDBaIiBmaWxsPSJ1cmwoI2dtaUdyYWRpZW50KSIgZmlsbC1vcGFjaXR5PSIwLjE1Ii8+CiAgICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI0MDAiIHI9IjE1MCIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CiAgICA8Y2lyY2xlIGN4PSIxMDAwIiBjeT0iMTUwIiByPSIxMDAiIGZpbGw9InVybCgjZ21pR3JhZGllbnQpIiBmaWxsLW9wYWNpdHk9IjAuMjUiLz4KICAgIDxwYXRoIGQ9Ik01MDAgNTBMMjEwMCA1NTBMMjgwMCAwWiIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center center;
+            padding-top: 100px;
+            scroll-behavior: smooth;
+        }
+
+        /* Menyesuaikan text-info agar kontras pada background gelap */
+        .text-info {
+            color: var(--dm-accent-blue) !important;
+        }
+
+        /* Navbar khusus */
+        .navbar-custom {
+            background-color: rgba(26, 26, 26, 0.4) !important; /* Semi-transparan untuk efek kaca */
+            backdrop-filter: blur(8px); /* Efek blur di belakang navbar */
+            border: 1px solid rgba(51, 51, 51, 0.5); /* Border semi-transparan */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 0.5rem;
+            border-radius: 20px;
+            margin: 15px auto;
+            max-width: fit-content;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 200px;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1030;
+            width: auto;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+        }
+        
+        /* Gaya navbar saat di-scroll (menjadi solid) */
+        .navbar-custom.navbar-scrolled {
+            background-color: var(--dm-dark-gray) !important; /* Menjadi solid */
+            border-color: var(--dm-border-color) !important; /* Border solid */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8); /* Bayangan lebih kuat */
+            backdrop-filter: blur(0px); /* Hapus blur */
+        }
+
+
+        /* Sembunyikan brand text/logo */
+        .navbar-custom .navbar-brand {
+            display: none; 
+        }
+
+        .navbar-nav {
+            flex-direction: row;
+            align-items: center;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative; /* Penting untuk positioning indicator */
+            z-index: 1; /* Pastikan link di atas indikator */
+        }
+
+        .navbar-nav .nav-item {
+            margin: 0 5px;
+        }
+
+        /* Gaya untuk link navigasi (default - non-aktif dan tidak di-hover) */
+        .navbar-custom .nav-link {
+            color: var(--dm-light-gray) !important;
+            font-weight: 600;
+            padding: 0.6rem 1.4rem !important;
+            border-radius: 50px;
+            transition: color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        border-color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi halus untuk properti yang akan berubah */
+            border: 1px solid transparent; /* Default: border transparan (gada apa apa) */
+            background-color: transparent; /* Default: background transparan */
+            box-shadow: none; /* Default: tanpa bayangan */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative; /* Penting untuk z-index di atas indikator */
+            z-index: 2; /* Pastikan link di atas indikator */
+        }
+        
+        /* Gaya untuk link navigasi saat di-hover (non-aktif) */
+        .navbar-custom .nav-link:hover:not(.active) {
+            color: var(--dm-white) !important; /* Teks menjadi putih saat hover */
+            background-color: var(--dm-nav-item-hover-bg) !important; /* Latar belakang abu-abu gelap saat hover */
+            border-color: var(--dm-nav-item-hover-border) !important; /* Border halus saat hover */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Bayangan kecil saat hover */
+            transform: translateY(-1px);
+        }
+
+        /* Gaya untuk navigasi aktif (yang dipilih) - hanya teks dan transform, background dari indicator */
+        .navbar-nav .nav-item .nav-link.active {
+            background: transparent !important; /* Background transparan agar indicator terlihat */
+            box-shadow: none !important; /* Hapus shadow agar indicator terlihat */
+            border: 1px solid transparent !important; /* Hapus border agar indicator terlihat */
+            
+            color: var(--dm-white) !important; /* Teks putih saat aktif */
+            transform: translateY(-1px); /* Tetap ada efek lift */
+            transition: color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi hanya untuk warna teks dan transform */
+        }
+
+        /* Indikator aktif yang bergerak */
+        #active-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+            border-radius: 50px;
+            box-shadow: 0 5px 20px var(--dm-active-shadow-color);
+            border: 1px solid var(--dm-accent-blue);
+            transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        opacity 0.4s ease;
+            opacity: 0; /* Awalnya sembunyikan */
+            z-index: 0; /* Di belakang link (yang z-index: 2) */
+        }
+        #active-indicator.visible {
+            opacity: 1;
+        }
+
+
+        /* Wrapper untuk konten utama (agar terpusat) */
+        .main-content-container {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Kustomisasi alert Bootstrap untuk tema gelap */
+        .alert-flash {
+            background-color: var(--dm-dark-gray) !important;
+            color: var(--dm-white) !important;
+            border: 1px solid var(--dm-border-color) !important;
+            border-radius: 10px !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
+            padding: 1rem 1.5rem !important;
+            margin: 20px auto !important;
+            max-width: 500px;
+            text-align: center;
+            font-weight: 600;
+            display: block;
+        }
+        .alert-success { background-color: #008000 !important; border-color: #006400 !important; }
+        .alert-info { background-color: #0056b3 !important; border-color: #003d7a !important; }
+        .alert-warning { background-color: #8B4513 !important; border-color: #69340f !important; }
+        .alert-danger { background-color: #8B0000 !important; border-color: #6a0000 !important; }
+        .alert-success, .alert-info, .alert-warning, .alert-danger {
+            color: var(--dm-white) !important;
+        }
+
+
+        /* General styling for cards (login, register, features) */
+        .card {
+            background-color: var(--dm-dark-gray) !important;
+            color: var(--dm-light-gray);
+            border: 1px solid var(--dm-border-color);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            border-radius: 15px !important;
+        }
+
+        .card-title {
+            color: var(--dm-white) !important;
+            font-weight: 800 !important;
+        }
+        .card-text {
+            color: var(--dm-light-gray) !important;
+        }
+
+        /* Form control styling */
+        .form-label {
+            color: var(--dm-light-gray);
+            font-weight: 600;
+        }
+
+        .form-control {
+            background-color: var(--dm-black) !important;
+            color: var(--dm-white) !important;
+            border: 1px solid var(--dm-border-color) !important;
+            border-radius: 8px !important;
+            padding: 0.75rem 1rem !important;
+        }
+
+        .form-control:focus {
+            border-color: var(--dm-accent-blue) !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5) !important;
+            background-color: var(--dm-black) !important;
+        }
+        .form-control::placeholder {
+            color: #888;
+            opacity: 0.7;
+        }
+
+
+        /* Button styling */
+        .btn-primary {
+            background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end)) !important;
+            border: none !important;
+            color: var(--dm-white) !important;
+            font-weight: 700 !important;
+            padding: 0.8rem 2rem;
+            border-radius: 10px !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5) !important;
+        }
+
+        .btn-outline-light {
+            color: var(--dm-accent-blue) !important;
+            border-color: var(--dm-accent-blue) !important;
+            font-weight: 700 !important;
+            padding: 0.8rem 2rem;
+            border-radius: 10px !important;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-light:hover {
+            background-color: var(--dm-accent-blue) !important;
+            color: var(--dm-white) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5) !important;
+        }
+
+        .btn-info {
+            background-color: var(--dm-accent-purple) !important;
+            border-color: var(--dm-accent-purple) !important;
+            color: var(--dm-white) !important;
+            font-weight: 600 !important;
+        }
+        .btn-info:hover {
+            background-color: #5d33a1 !important;
+            border-color: #5d33a1 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.4) !important;
+        }
+
+        .btn-danger {
+            font-weight: 600 !important;
+        }
+
+        /* List group styling */
+        .list-group {
+            --bs-list-group-bg: var(--dm-dark-gray);
+            --bs-list-group-border-color: var(--dm-border-color);
+            --bs-list-group-color: var(--dm-white);
+            --bs-list-group-action-hover-bg: var(--dm-black);
+            --bs-list-group-action-active-bg: var(--dm-black);
+            --bs-list-group-action-active-color: var(--dm-white);
+            border-radius: 15px;
+        }
+        .list-group-item {
+            background-color: var(--dm-dark-gray) !important;
+            border-color: var(--dm-border-color) !important;
+            color: var(--dm-white) !important;
+        }
+        .list-group-item a {
+            color: var(--dm-accent-blue) !important;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .list-group-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table styling */
+        .table {
+            --bs-table-bg: var(--dm-dark-gray);
+            --bs-table-color: var(--dm-light-gray);
+            --bs-table-border-color: var(--dm-border-color);
+            color: var(--dm-light-gray);
+            border: 1px solid var(--dm-border-color);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .table th, .table td {
+            border-color: var(--dm-border-color) !important;
+            padding: 0.75rem;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: var(--dm-black) !important;
+        }
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: var(--dm-dark-gray) !important;
+        }
+        .table thead {
+            background-color: var(--dm-accent-purple) !important;
+            color: var(--dm-white);
+        }
+
+
+   /* Custom styles for the hero section */
+    .hero-section {
+        background-color: transparent; /* Pastikan transparan agar background body terlihat */
+        color: var(--dm-white);
+        padding: 10rem 0 8rem 0;
+        text-align: center;
+        border-radius: 0px; 
+        margin-top: 0px; 
+        margin-bottom: 0px; 
+        position: relative;
+        overflow: hidden;
+        box-shadow: none; 
+        min-height: calc(100vh - 100px); /* Kurangi tinggi navbar */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%; /* Memastikan hero section mengambil lebar penuh */
+    }
+
+    .hero-section h1 {
+        font-size: 4.5rem;
+        font-weight: 800;
+        margin-bottom: 2rem;
+        line-height: 1.1;
+        background: linear-gradient(to right, #0060ff, #9ee7ce, #a5e50a); 
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-section .main-title {
+        font-size: 6rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        line-height: 1.1;
+        color: var(--dm-white); /* Warna teks putih solid */
+    }
+
+    /* Gaya untuk Personal Greeting */
+    .personal-greeting-text {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        line-height: 1.1;
+        background: linear-gradient(to right, #0060ff, #9ee7ce, #a5e50a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent !important; /* Paksa warna teks menjadi transparan agar gradasi terlihat */
+        text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+
+
+    .hero-section .subtitle {
+        font-size: 1.8rem;
+        font-weight: 300;
+        max-width: 800px;
+        margin: 0 auto 3rem auto;
+        line-height: 1.5;
+        color: var(--dm-light-gray);
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-hero {
+        font-size: 1.2rem;
+        padding: 0.9rem 2.5rem;
+        border-radius: 50px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-hero:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Info/Features Section */
+    .info-section {
+        padding: 5rem 0;
+        background-color: transparent; /* Transparan agar background body terlihat */
+        border-radius: 0px;
+        box-shadow: none;
+        margin-top: 40px;
+        margin-bottom: 60px;
+        color: var(--dm-light-gray);
+        width: 100%;
+        max-width: 1200px; /* Batasi lebar konten di dalamnya */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .info-section h3 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: var(--dm-white); /* Warna teks putih solid */
+        margin-bottom: 3rem;
+        text-shadow: 0 3px 10px rgba(0, 123, 255, 0.2);
+    }
+
+    .feature-item {
+        padding: 2.5rem;
+        border-radius: 15px;
+        background-color: var(--dm-black);
+        border: 1px solid var(--dm-border-color);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        margin-bottom: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+        border-color: var(--dm-accent-blue);
+    }
+
+    .feature-item .icon {
+        font-size: 4.5rem;
+        color: var(--dm-accent-blue);
+        margin-bottom: 1.5rem;
+        display: block;
+        text-align: center;
+    }
+
+    .feature-item h4 {
+        font-weight: 700;
+        font-size: 1.75rem;
+        color: var(--dm-white);
+        margin-bottom: 1rem;
+    }
+    .feature-item p {
+        color: var(--dm-light-gray);
+        font-size: 1.1rem;
+    }
+
+    /* Section Divider Line - FOKUS PERBAIKAN DI SINI */
+    .section-divider {
+        position: relative;
+        width: 80%; /* Lebar garis */
+        max-width: 800px;
+        height: 3px; /* JADIKAN LEBIH TEBAL */
+        background: linear-gradient(to right, transparent, var(--dm-gradient-start), var(--dm-gradient-end), transparent); /* Gradasi pada garis */
+        margin: 4rem auto; /* Spasi di atas dan bawah */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 15px rgba(0, 123, 255, 0.7); /* Tambah glowing effect pada garis */
+    }
+
+    .section-divider .marker {
+        position: absolute;
+        background-color: var(--dm-dark-gray); /* Background marker */
+        border: 1px solid var(--dm-border-color);
+        border-radius: 50%;
+        width: 50px; /* Ukuran marker */
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--dm-white);
+        box-shadow: 0 0 25px rgba(0, 123, 255, 0.8); /* PERKUAT GLOW EFFECT */
+        text-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Tambah shadow pada teks angka */
+    }
+
+    /* About Us Section */
+    .about-section {
+        padding: 5rem 0;
+        background-color: var(--dm-dark-gray); /* Latar belakang untuk about us */
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        margin-top: 60px;
+        margin-bottom: 60px;
+        color: var(--dm-light-gray);
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .about-section h3 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: var(--dm-white); /* Warna teks putih solid */
+        margin-bottom: 2rem;
+        text-shadow: 0 3px 10px rgba(0, 123, 255, 0.2);
+    }
+    .about-section p {
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        padding: 5rem 0;
+        background-color: transparent;
+        margin-top: 60px;
+        margin-bottom: 60px;
+        color: var(--dm-light-gray);
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .faq-section h3 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: var(--dm-white); /* Warna teks putih solid */
+        margin-bottom: 3rem;
+        text-shadow: 0 3px 10px rgba(0, 123, 255, 0.2);
+    }
+
+    /* Bootstrap Accordion Customization */
+    .accordion-item {
+        background-color: var(--dm-dark-gray);
+        border: 1px solid var(--dm-border-color);
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+    }
+    .accordion-button {
+        background-color: var(--dm-dark-gray) !important;
+        color: var(--dm-white) !important;
+        font-weight: 700;
+        font-size: 1.2rem;
+        border: none !important;
+        border-radius: 10px !important;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: var(--dm-black) !important;
+        color: var(--dm-accent-blue) !important;
+        box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    }
+    .accordion-button:focus {
+        box-shadow: none !important;
+        border-color: var(--dm-accent-blue) !important;
+    }
+    .accordion-body {
+        background-color: var(--dm-black);
+        color: var(--dm-light-gray);
+        padding: 1.5rem;
+        border-top: 1px solid var(--dm-border-color);
+    }
+
+
+    /* Footer Section */
+    .footer-section {
+        background-color: var(--dm-dark-gray);
+        color: var(--dm-light-gray);
+        padding: 2.5rem 0;
+        margin-top: 60px;
+        border-radius: 0px;
+        border-top: 1px solid var(--dm-border-color);
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+        width: 100%;
+    }
+
+    /* Override gaya Bootstrap row dan col agar lebih fleksibel di tema ini */
+    .row {
+        --bs-gutter-x: 2rem;
+    }
+    .col-md-4, .col-lg-3 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }        

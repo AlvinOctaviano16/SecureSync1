@@ -1,0 +1,122 @@
+{# templates/auth/login_register.html #}
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 120px);"> {# Adjust min-height to account for fixed navbar #}
+    <div class="card-custom shadow-lg p-4 mb-5" style="max-width: 480px; width: 100%;"> {# Use card-custom from base.html styles #}
+        <div class="card-body">
+            {# Bagian Form Login #}
+            <div id="loginForm" class="form-section">
+                <h2 class="card-title text-center mb-4 text-white fw-bold">Selamat Datang Kembali!</h2>
+                <p class="card-text text-center text-secondary mb-4">Silakan login untuk mengakses To-Do List Anda.</p>
+
+                <form method="POST" action="{{ url_for('main.process_login') }}"> {# Arahkan ke process_login #}
+                    <div class="mb-3">
+                        <label for="usernameLogin" class="form-label fw-bold">Username</label>
+                        <input type="text" class="form-control rounded-pill px-3 py-2" id="usernameLogin" name="username" required placeholder="Masukkan username Anda">
+                    </div>
+                    <div class="mb-4">
+                        <label for="passwordLogin" class="form-label fw-bold">Password</label>
+                        <input type="password" class="form-control rounded-pill px-3 py-2" id="passwordLogin" name="password" required placeholder="Masukkan password Anda">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">Login</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted">Belum punya akun? <a href="#" id="showRegister" class="text-primary fw-bold text-decoration-none">Daftar di sini</a></p>
+                </div>
+            </div>
+
+            {# Bagian Form Register #}
+            <div id="registerForm" class="form-section" style="display: none;"> {# Awalnya tersembunyi #}
+                <h2 class="card-title text-center mb-4 text-white fw-bold">Buat Akun Baru</h2>
+                <p class="card-text text-center text-secondary mb-4">Daftar sekarang untuk mulai mengelola To-Do List Anda.</p>
+
+                <form method="POST" action="{{ url_for('main.process_register') }}"> {# Arahkan ke process_register #}
+                    <div class="mb-3">
+                        <label for="usernameRegister" class="form-label fw-bold">Username</label>
+                        <input type="text" class="form-control rounded-pill px-3 py-2" id="usernameRegister" name="username" required placeholder="Pilih username Anda">
+                    </div>
+                    <div class="mb-3">
+                        <label for="passwordRegister" class="form-label fw-bold">Password</label>
+                        <input type="password" class="form-control rounded-pill px-3 py-2" id="passwordRegister" name="password" required placeholder="Buat password Anda">
+                    </div>
+                    <div class="mb-4">
+                        <label for="confirm_passwordRegister" class="form-label fw-bold">Konfirmasi Password</label>
+                        <input type="password" class="form-control rounded-pill px-3 py-2" id="confirm_passwordRegister" name="confirm_password" required placeholder="Ulangi password Anda">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">Daftar Sekarang</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted">Sudah punya akun? <a href="#" id="showLogin" class="text-primary fw-bold text-decoration-none">Login di sini</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const showRegisterLink = document.getElementById('showRegister');
+        const showLoginLink = document.getElementById('showLogin');
+
+        // Fungsi untuk menampilkan form tertentu
+        function showForm(formType) {
+            if (formType === 'register') {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                registerForm.style.opacity = '0'; // Atur opacity untuk transisi
+                setTimeout(() => { registerForm.style.opacity = '1'; }, 10); // Transisi fade in
+            } else { // formType === 'login'
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                loginForm.style.opacity = '0'; // Atur opacity untuk transisi
+                setTimeout(() => { loginForm.style.opacity = '1'; }, 10); // Transisi fade in
+            }
+        }
+
+        // Handle klik link "Daftar di sini" dan "Login di sini"
+        if (showRegisterLink) {
+            showRegisterLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showForm('register');
+                history.pushState(null, '', '{{ url_for("main.login", form="register") }}'); // Update URL tanpa reload
+            });
+        }
+        if (showLoginLink) {
+            showLoginLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showForm('login');
+                history.pushState(null, '', '{{ url_for("main.login", form="login") }}'); // Update URL tanpa reload
+            });
+        }
+
+        // Tentukan form yang akan ditampilkan berdasarkan URL query parameter saat halaman dimuat
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialFormType = urlParams.get('form');
+        if (initialFormType === 'register') {
+            showForm('register');
+        } else {
+            showForm('login');
+        }
+    });
+</script>
+
+<style>
+    /* Transisi opacity untuk form-section */
+    .form-section {
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
+    }
+    .form-section.fade-out {
+        opacity: 0;
+    }
+</style>
+{% endblock %}
