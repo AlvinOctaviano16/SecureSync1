@@ -9,150 +9,189 @@
     <style>
         /* Variabel CSS untuk palet warna DeepMind-ish */
         :root {
-            --dm-black: #050505; /* Black yang sangat gelap */
-            --dm-dark-gray: #1A1A1A; /* Latar belakang elemen seperti card */
-            --dm-light-gray: #B0B0B0; /* Teks default yang lembut */
-            --dm-white: #FFFFFF; /* Teks judul, highlight */
-            --dm-accent-blue: #007bff; /* Biru standar Bootstrap untuk aksen */
-            --dm-accent-purple: #6F42C1; /* Ungu gelap untuk aksien */
-            --dm-border-color: #333333; /* Warna border halus */
-            --dm-gradient-start: #6A11CB; /* Ungu untuk gradien */
-            --dm-gradient-end: #2575FC;   /* Biru untuk gradien */
-            --dm-nav-item-hover-bg: #2B2B2B; /* Latar belakang hover baru, sedikit lebih terang dari dark-gray */
-            --dm-nav-item-hover-border: #444444; /* Border halus saat hover */
-            --dm-active-shadow-color: rgba(0, 123, 255, 0.7); /* Warna bayangan aktif lebih pekat */
+            --dm-black: #050505;
+            --dm-dark-gray: #1A1A1A;
+            --dm-light-gray: #B0B0B0;
+            --dm-white: #FFFFFF;
+            --dm-accent-blue: #007bff;
+            --dm-accent-purple: #6F42C1;
+            --dm-border-color: #333333;
+            --dm-gradient-start: #6A11CB;
+            --dm-gradient-end: #2575FC;
+            --dm-nav-item-hover-bg: #2B2B2B; /* Warna ini tidak akan digunakan untuk background hover */
+            --dm-nav-item-hover-border: rgba(0, 123, 255, 0.5); /* Border transparan biru saat hover */
+            --dm-active-shadow-color: rgba(0, 123, 255, 0.7);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--dm-black); /* Latar belakang dasar */
-            color: var(--dm-light-gray); /* Warna teks default */
+            background-color: var(--dm-black);
+            color: var(--dm-light-gray);
             margin: 0;
             padding: 0;
             line-height: 1.6;
-            overflow-x: hidden; /* Mencegah scroll horizontal */
-            min-height: 100vh; /* Memastikan body mengisi seluruh tinggi viewport */
-            display: flex; /* Menggunakan flexbox untuk layout utama */
-            flex-direction: column; /* Mengatur item flex secara kolom */
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             
-            /* Latar belakang global untuk body, akan terlihat di belakang navbar */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), /* Overlay gelap */
+            /* Latar belakang global untuk body */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
                               url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD09IjAgMCAxMjAwIDYwMCI+CiAgICA8ZGVmcz4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWTDPSJncml2aXR5R215Z3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjNjE2QkY0IiBvZmZzZXQ9IjUwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIxMDAlIi8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDwvZGVmcz4KICAgIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwNTA1MDUiLz4KICAgIDxwYXRoIGQ9Ik0wIDBMMjAwIDYwMEwxMDAwIDYwMEwxMjAwIDBaTTQwMCAwTDYwMCA2MDBMODAwIDYwMEwxMDAwIDBaIiBmaWxsPSJ1cmwoI2dtaUdyYWRpZW50KSIgZmlsbC1vcGFjaXR5PSIwLjE1Ii8+CiAgICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI0MDAiIHI9IjE1MCIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CiAgICA8Y2lyY2xlIGN4PSIxMDAwIiBjeT0iMTUwIiByPSIxMDAiIGZpbGw9InVybCgjZ21pR3JhZGllbnQpIiBmaWxsLW9wYWNpdHk9IjAuMjUiLz4KICAgIDxwYXRoIGQ9Ik01MDAgNTBMMjEwMCA1NTBMMjgwMCAwWiIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==');
             background-size: cover;
-            background-attachment: fixed; /* Membuat background tetap saat scroll */
+            background-attachment: fixed;
             background-position: center center;
-            padding-top: 100px; /* Tambahkan padding ke body untuk mengkompensasi fixed navbar */
-            scroll-behavior: smooth; /* Tambahkan ini untuk smooth scrolling */
+            padding-top: 100px;
+            scroll-behavior: smooth;
         }
 
-        /* Menyesuaikan text-info agar kontras pada background gelap (dari Bootstrap) */
+        /* Menyesuaikan text-info agar kontras pada background gelap */
         .text-info {
             color: var(--dm-accent-blue) !important;
         }
 
         /* Navbar khusus */
         .navbar-custom {
-            background-color: var(--dm-dark-gray) !important; /* Navbar sedikit lebih terang dari background body */
-            border: 1px solid var(--dm-border-color); /* Border untuk navbar keseluruhan */
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7); /* Bayangan lebih kuat untuk navbar */
-            padding: 0.5rem 0.5rem; /* Padding navbar disesuaikan */
-            border-radius: 20px; /* Sudut membulat untuk navbar itu sendiri */
-            margin: 15px auto; /* Margin auto untuk pusat di tengah, lebih turun sedikit */
-            max-width: fit-content; /* Navbar akan menyesuaikan lebar kontennya */
-            display: flex; /* Menggunakan flexbox untuk penempatan item */
-            justify-content: center; /* Pusat item secara horizontal */
-            align-items: center; /* Pusat item secara vertikal */
-            min-width: 200px; /* Pastikan navbar tidak terlalu kecil */
-            position: fixed; /* Membuat navbar fixed */
-            top: 20px; /* Posisi sedikit ke bawah dari atas */
-            left: 50%; /* Pusat secara horizontal */
-            transform: translateX(-50%); /* Menyesuaikan posisi tengah */
-            z-index: 1030; /* Pastikan navbar di atas konten lain */
-            width: auto; /* Agar max-width fit-content bekerja */
+            background-color: rgba(26, 26, 26, 0.4) !important; /* Semi-transparan untuk efek kaca */
+            backdrop-filter: blur(8px); /* Efek blur di belakang navbar */
+            border: 1px solid rgba(51, 51, 51, 0.5); /* Border semi-transparan */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 0.5rem;
+            border-radius: 20px;
+            margin: 15px auto;
+            max-width: fit-content;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 200px;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1030;
+            width: auto;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
         }
         
+        /* Gaya navbar saat di-scroll (menjadi solid) */
+        .navbar-custom.navbar-scrolled {
+            background-color: var(--dm-dark-gray) !important; /* Menjadi solid */
+            border-color: var(--dm-border-color) !important; /* Border solid */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8); /* Bayangan lebih kuat */
+            backdrop-filter: blur(0px); /* Hapus blur */
+        }
+
+
         /* Sembunyikan brand text/logo */
         .navbar-custom .navbar-brand {
             display: none; 
         }
 
         .navbar-nav {
-            flex-direction: row; /* Pastikan item navigasi sejajar horizontal */
-            align-items: center; /* Pastikan item sejajar vertikal */
-            margin: 0 !important; /* Hapus margin default ul */
-            padding: 0 !important; /* Hapus padding default ul */
+            flex-direction: row;
+            align-items: center;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative; /* Penting untuk positioning indicator */
+            z-index: 1; /* Pastikan link di atas indikator */
         }
 
         .navbar-nav .nav-item {
-            margin: 0 5px; /* Spasi antar item navigasi, sedikit lebih rapat */
+            margin: 0 5px;
         }
 
-        /* Gaya untuk link navigasi (default) */
+        /* Gaya untuk link navigasi (default - non-aktif dan tidak di-hover) */
         .navbar-custom .nav-link {
-            color: var(--dm-light-gray) !important; /* Teks navlink default abu-abu terang */
+            color: var(--dm-light-gray) !important;
             font-weight: 600;
-            padding: 0.6rem 1.4rem !important; /* Padding navlink yang disesuaikan */
-            border-radius: 50px; /* Bentuk pil default */
-            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi lebih cepat dan halus */
-            border: 1px solid transparent; /* Border transparan default */
-            display: flex; /* Memastikan padding konsisten */
-            align-items: center; /* Memastikan teks di tengah */
-            justify-content: center; /* Memastikan teks di tengah */
+            padding: 0.6rem 1.4rem !important;
+            border-radius: 50px;
+            transition: color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        border-color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi halus untuk properti yang akan berubah */
+            border: 1px solid transparent; /* Default: border transparan (gada apa apa) */
+            background-color: transparent; /* Default: background transparan */
+            box-shadow: none; /* Default: tanpa bayangan */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative; /* Penting untuk z-index di atas indikator */
+            z-index: 2; /* Pastikan link di atas indikator */
         }
-
-        /* Gaya untuk link navigasi saat di-hover */
-        .navbar-custom .nav-link:hover {
-            color: var(--dm-white) !important; /* Efek hover menjadi putih */
+        
+        /* Gaya untuk link navigasi saat di-hover (non-aktif) */
+        .navbar-custom .nav-link:hover:not(.active) {
+            color: var(--dm-white) !important; /* Teks menjadi putih saat hover */
             background-color: var(--dm-nav-item-hover-bg) !important; /* Latar belakang abu-abu gelap saat hover */
             border-color: var(--dm-nav-item-hover-border) !important; /* Border halus saat hover */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Bayangan kecil dan halus saat hover */
-            transform: translateY(-1px); /* Sedikit lift saat hover */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Bayangan kecil saat hover */
+            transform: translateY(-1px);
         }
 
-        /* Gaya untuk navigasi aktif (yang dipilih) */
+        /* Gaya untuk navigasi aktif (yang dipilih) - hanya teks dan transform, background dari indicator */
         .navbar-nav .nav-item .nav-link.active {
-            background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end)) !important;
-            color: var(--dm-white) !important;
-            border-radius: 50px !important; /* Bentuk pil */
-            padding: 0.6rem 1.6rem !important; /* Padding lebih lebar untuk pil aktif */
-            box-shadow: 0 5px 20px var(--dm-active-shadow-color); /* Bayangan yang lebih menonjol untuk item aktif */
-            transform: translateY(-1px);
-            border: 1px solid var(--dm-accent-blue) !important; /* Border untuk item aktif */
+            background: transparent !important; /* Background transparan agar indicator terlihat */
+            box-shadow: none !important; /* Hapus shadow agar indicator terlihat */
+            border: 1px solid transparent !important; /* Hapus border agar indicator terlihat */
+            
+            color: var(--dm-white) !important; /* Teks putih saat aktif */
+            transform: translateY(-1px); /* Tetap ada efek lift */
+            transition: color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi hanya untuk warna teks dan transform */
         }
+
+        /* Indikator aktif yang bergerak */
+        #active-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+            border-radius: 50px;
+            box-shadow: 0 5px 20px var(--dm-active-shadow-color);
+            border: 1px solid var(--dm-accent-blue);
+            transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        opacity 0.4s ease;
+            opacity: 0; /* Awalnya sembunyikan */
+            z-index: 0; /* Di belakang link (yang z-index: 2) */
+        }
+        #active-indicator.visible {
+            opacity: 1;
+        }
+
 
         /* Wrapper untuk konten utama (agar terpusat) */
-        .content-wrapper {
-            flex-grow: 1; /* Memastikan wrapper ini mengisi ruang yang tersisa */
-            width: 100%; /* Mengambil lebar penuh */
-            max-width: 1200px; /* Lebar maksimum yang konsisten */
-            margin-left: auto; /* Memusatkan secara horizontal */
-            margin-right: auto; /* Memusatkan secara horizontal */
-            padding: 1.5rem; /* Padding horizontal dan vertikal */
+        .main-content-container {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Memusatkan konten di tengah */
+            align-items: center;
         }
 
         /* Kustomisasi alert Bootstrap untuk tema gelap */
-        .alert-flash { /* Kelas baru untuk alert flash */
-            background-color: var(--dm-dark-gray) !important; /* Latar belakang mirip navbar */
-            color: var(--dm-white) !important; /* Teks putih agar terbaca */
+        .alert-flash {
+            background-color: var(--dm-dark-gray) !important;
+            color: var(--dm-white) !important;
             border: 1px solid var(--dm-border-color) !important;
-            border-radius: 10px !important; /* Membulat */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important; /* Bayangan */
+            border-radius: 10px !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
             padding: 1rem 1.5rem !important;
-            margin: 20px auto !important; /* Tengah horizontal */
-            max-width: 500px; /* Lebar maksimum agar tidak terlalu panjang */
-            text-align: center; /* Teks di tengah */
+            margin: 20px auto !important;
+            max-width: 500px;
+            text-align: center;
             font-weight: 600;
-            display: block; /* Memastikan margin auto bekerja */
+            display: block;
         }
-        /* Override warna spesifik alert Bootstrap agar tetap terbaca */
-        .alert-success { background-color: #008000 !important; border-color: #006400 !important; } /* Hijau gelap */
-        .alert-info { background-color: #0056b3 !important; border-color: #003d7a !important; } /* Biru gelap */
-        .alert-warning { background-color: #8B4513 !important; border-color: #69340f !important; } /* Coklat gelap */
-        .alert-danger { background-color: #8B0000 !important; border-color: #6a0000 !important; } /* Merah gelap */
-        /* Pastikan teks tetap putih di alert yang override warnanya */
+        .alert-success { background-color: #008000 !important; border-color: #006400 !important; }
+        .alert-info { background-color: #0056b3 !important; border-color: #003d7a !important; }
+        .alert-warning { background-color: #8B4513 !important; border-color: #69340f !important; }
+        .alert-danger { background-color: #8B0000 !important; border-color: #6a0000 !important; }
         .alert-success, .alert-info, .alert-warning, .alert-danger {
             color: var(--dm-white) !important;
         }
@@ -160,16 +199,16 @@
 
         /* General styling for cards (login, register, features) */
         .card {
-            background-color: var(--dm-dark-gray) !important; /* Latar belakang card */
-            color: var(--dm-light-gray); /* Teks card */
+            background-color: var(--dm-dark-gray) !important;
+            color: var(--dm-light-gray);
             border: 1px solid var(--dm-border-color);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Bayangan card lebih kuat */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
             border-radius: 15px !important;
         }
 
         .card-title {
-            color: var(--dm-white) !important; /* Judul card putih */
-            font-weight: 800 !important; /* Sangat tebal */
+            color: var(--dm-white) !important;
+            font-weight: 800 !important;
         }
         .card-text {
             color: var(--dm-light-gray) !important;
@@ -177,25 +216,25 @@
 
         /* Form control styling */
         .form-label {
-            color: var(--dm-light-gray); /* Label form */
+            color: var(--dm-light-gray);
             font-weight: 600;
         }
 
         .form-control {
-            background-color: var(--dm-black) !important; /* Input field sangat gelap */
-            color: var(--dm-white) !important; /* Teks input putih */
+            background-color: var(--dm-black) !important;
+            color: var(--dm-white) !important;
             border: 1px solid var(--dm-border-color) !important;
-            border-radius: 8px !important; /* Sedikit kurang bulat */
-            padding: 0.75rem 1rem !important; /* Padding lebih banyak */
+            border-radius: 8px !important;
+            padding: 0.75rem 1rem !important;
         }
 
         .form-control:focus {
             border-color: var(--dm-accent-blue) !important;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5) !important; /* Shadow focus biru */
-            background-color: var(--dm-black) !important; /* Tetap gelap saat fokus */
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5) !important;
+            background-color: var(--dm-black) !important;
         }
         .form-control::placeholder {
-            color: #888; /* Warna placeholder */
+            color: #888;
             opacity: 0.7;
         }
 
@@ -207,14 +246,14 @@
             color: var(--dm-white) !important;
             font-weight: 700 !important;
             padding: 0.8rem 2rem;
-            border-radius: 10px !important; /* Sedikit kurang bulat dari pil */
+            border-radius: 10px !important;
             transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
             opacity: 0.9;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5) !important; /* Bayangan hover biru */
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5) !important;
         }
 
         .btn-outline-light {
@@ -232,14 +271,14 @@
             box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5) !important;
         }
 
-        .btn-info { /* Tombol share */
+        .btn-info {
             background-color: var(--dm-accent-purple) !important;
             border-color: var(--dm-accent-purple) !important;
             color: var(--dm-white) !important;
             font-weight: 600 !important;
         }
         .btn-info:hover {
-            background-color: #5d33a1 !important; /* sedikit lebih gelap */
+            background-color: #5d33a1 !important;
             border-color: #5d33a1 !important;
             transform: translateY(-1px);
             box-shadow: 0 4px 10px rgba(106, 17, 203, 0.4) !important;
@@ -250,14 +289,14 @@
         }
 
         /* List group styling */
-        .list-group { /* Override list-group Bootstrap */
+        .list-group {
             --bs-list-group-bg: var(--dm-dark-gray);
             --bs-list-group-border-color: var(--dm-border-color);
             --bs-list-group-color: var(--dm-white);
             --bs-list-group-action-hover-bg: var(--dm-black);
             --bs-list-group-action-active-bg: var(--dm-black);
             --bs-list-group-action-active-color: var(--dm-white);
-            border-radius: 15px; /* Sudut membulat untuk list group */
+            border-radius: 15px;
         }
         .list-group-item {
             background-color: var(--dm-dark-gray) !important;
@@ -280,18 +319,18 @@
             --bs-table-border-color: var(--dm-border-color);
             color: var(--dm-light-gray);
             border: 1px solid var(--dm-border-color);
-            border-radius: 15px; /* Sudut membulat untuk tabel */
-            overflow: hidden; /* Penting untuk border-radius di tabel */
+            border-radius: 15px;
+            overflow: hidden;
         }
         .table th, .table td {
             border-color: var(--dm-border-color) !important;
             padding: 0.75rem;
         }
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: var(--dm-black) !important; /* Row ganjil lebih gelap */
+            background-color: var(--dm-black) !important;
         }
         .table-striped tbody tr:nth-of-type(even) {
-            background-color: var(--dm-dark-gray) !important; /* Row genap */
+            background-color: var(--dm-dark-gray) !important;
         }
         .table thead {
             background-color: var(--dm-accent-purple) !important;
@@ -304,42 +343,47 @@
         <div class="container-fluid">
             <div class="collapse navbar-collapse justify-content-center">
                 <ul class="navbar-nav">
+                    {# Indikator aktif yang bergerak #}
+                    <div id="active-indicator"></div>
                     {# Link Home, aktif jika di halaman home #}
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}#top">Home</a>
+                        <a class="nav-link" data-target-id="top" href="{{ url_for('home') }}#top">Home</a>
                     </li>
                     {# Services dan About Us link, selalu terlihat #}
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'home' and request.fragment == 'services-section' %}active{% endif %}" href="{{ url_for('home') }}#services-section">Services</a>
+                        <a class="nav-link" data-target-id="services-section" href="{{ url_for('home') }}#services-section">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'home' and request.fragment == 'about-section' %}active{% endif %}" href="{{ url_for('home') }}#about-section">About Us</a>
+                        <a class="nav-link" data-target-id="about-section" href="{{ url_for('home') }}#about-section">About Us</a>
+                    </li>
+                     <li class="nav-item">
+                       <a class="nav-link" data-target-id="faq-section" href="{{ url_for('home') }}#faq-section">FAQ</a>
                     </li>
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">Dashboard</a>
+                            <a class="nav-link" data-target-id="dashboard-page" href="{{ url_for('dashboard') }}">Dashboard</a>
                         </li>
                         {% if current_user.role == 'admin' %}
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'admin_panel' %}active{% endif %}" href="{{ url_for('admin_panel') }}">Admin Panel</a>
+                            <a class="nav-link" data-target-id="admin-panel-page" href="{{ url_for('admin_panel') }}">Admin Panel</a>
                         </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                            <a class="nav-link" data-target-id="logout-action" href="{{ url_for('logout') }}">Logout</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'login' %}active{% endif %}" href="{{ url_for('login') }}">Login</a>
+                            <a class="nav-link" data-target-id="login-page" href="{{ url_for('login') }}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'register' %}active{% endif %}" href="{{ url_for('register') }}">Register</a>
+                            <a class="nav-link" data-target-id="register-page" href="{{ url_for('register') }}">Register</a>
                         </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="container-fluid main-content-container">
+    <div class="container main-content-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="d-flex justify-content-center w-100">
@@ -353,5 +397,6 @@
     </div>
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
