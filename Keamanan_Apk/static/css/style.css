@@ -414,7 +414,7 @@ body {
 /* Info/Features Section */
 .info-section {
     padding: 5rem 0;
-    background-color: var(--dm-dark-gray); /* Ganti agar ada latar belakang kontras */
+    background-color: transparent; /* Ganti agar ada latar belakang kontras */
     border-radius: 0px; /* Hapus border radius */
     box-shadow: none;
     margin-top: 0px; /* Tidak perlu margin top karena sudah ada shape divider */
@@ -625,16 +625,6 @@ body {
 
 
 /* Footer Section */
-.footer-section {
-    background-color: var(--dm-dark-gray);
-    color: var(--dm-light-gray);
-    padding: 2.5rem 0;
-    margin-top: 0px; /* Sesuaikan margin */
-    border-radius: 0px;
-    border-top: 1px solid var(--dm-border-color);
-    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
-    width: 100%;
-}
 
 /* Override gaya Bootstrap row dan col agar lebih fleksibel di tema ini */
 .row {
