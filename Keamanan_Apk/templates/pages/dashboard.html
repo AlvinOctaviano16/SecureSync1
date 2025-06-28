@@ -1,37 +1,77 @@
-{% extends "base.html" %}
-{% block content %}
-    <h2>Dashboard {{ current_user.username }}</h2>
-    <hr>
-    <h3>To-Do List Milik Saya <a href="{{ url_for('create_todo') }}" class="btn btn-primary btn-sm ms-3">Buat Baru</a></h3>
-    {% if owned_lists %}
-        <ul class="list-group mb-4">
-            {% for todo_list in owned_lists %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="{{ url_for('todo_detail', todo_id=todo_list.id) }}">{{ todo_list.name }}</a>
-                    <div>
-                        <a href="{{ url_for('share_todo', todo_id=todo_list.id) }}" class="btn btn-info btn-sm me-2">Share</a>
-                        <form action="{{ url_for('delete_todo', todo_id=todo_list.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus To-Do List ini dan semua tugasnya?');">Hapus</button>
-                        </form>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Anda belum memiliki To-Do List. <a href="{{ url_for('create_todo') }}">Buat yang pertama!</a></p>
-    {% endif %}
+{# templates/pages/dashboard.html #}
+{% extends "shared/base.html" %}
 
-    <h3>To-Do List yang Dibagikan kepada Saya</h3>
-    {% if shared_lists %}
-        <ul class="list-group">
-            {% for todo_list in shared_lists %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="{{ url_for('todo_detail', todo_id=todo_list.id) }}">{{ todo_list.name }}</a>
-                    <span class="badge bg-secondary">{{ todo_list.owner.username }} (Owner)</span>
-                </li>
+{% block content %}
+<div class="dashboard-content">
+    <h1 class="dashboard-title animate-fade-in-up">Dashboard Pengguna</h1>
+    <p class="dashboard-subtitle animate-fade-in-up delay-1">Selamat datang kembali, {{ current_user.username }}!</p>
+
+    <div class="card-section animate-fade-in-up delay-2">
+        <div class="card dashboard-info-card">
+            <div class="card-body">
+                <h5 class="card-title">To-Do List Milik Saya</h5>
+                <p class="card-text">Anda memiliki **{{ user_todo_lists | length }}** daftar To-Do.</p>
+                <a href="{{ url_for('main.create_todo') }}" class="btn btn-primary btn-sm">Buat Baru <i class="fas fa-plus"></i></a>
+            </div>
+        </div>
+        <div class="card dashboard-info-card">
+            <div class="card-body">
+                <h5 class="card-title">To-Do List yang Dibagikan</h5>
+                <p class="card-text">Anda tergabung dalam **{{ shared_todo_lists | length }}** daftar To-Do yang dibagikan.</p>
+                <a href="{{ url_for('main.shared_todo_lists') }}" class="btn btn-outline-light btn-sm">Lihat Dibagikan <i class="fas fa-users"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-lists-section">
+        <h3 class="section-heading animate-fade-in-up delay-3">Daftar To-Do Saya</h3>
+        {% if user_todo_lists %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 animate-fade-in-up delay-4">
+            {% for todo_list in user_todo_lists %}
+            <div class="col">
+                <div class="card todo-list-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ todo_list.name }}</h5>
+                        <p class="card-text">{{ todo_list.description | default('Tidak ada deskripsi', true) }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            {# DIKOREKSI: Menggunakan 'todo_id' sesuai dengan definisi rute Flask #}
+                            <a href="{{ url_for('main.todo_detail', todo_id=todo_list.id) }}" class="btn btn-sm btn-outline-light">Detail <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>Belum ada To-Do List yang dibagikan kepada Anda.</p>
-    {% endif %} {# <--- INI DIA YANG HILANG! #}
+        </div>
+        {% else %}
+        <p class="text-center py-4 animate-fade-in-up delay-4">Anda belum memiliki To-Do List. <a href="{{ url_for('main.create_todo') }}">Buat yang pertama!</a></p>
+        {% endif %}
+    </div>
+
+    {# Anda bisa menambahkan section untuk To-Do List yang dibagikan juga di sini, mirip dengan di atas #}
+    {# Contoh:
+    <div class="dashboard-lists-section mt-5">
+        <h3 class="section-heading animate-fade-in-up delay-5">Daftar To-Do yang Dibagikan kepada Saya</h3>
+        {% if shared_todo_lists %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 animate-fade-in-up delay-6">
+            {% for todo_list in shared_todo_lists %}
+            <div class="col">
+                <div class="card todo-list-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ todo_list.name }} <span class="badge bg-info ms-2">Shared by: {{ todo_list.owner_username }}</span></h5>
+                        <p class="card-text">{{ todo_list.description | default('Tidak ada deskripsi', true) }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <a href="{{ url_for('main.todo_detail', todo_id=todo_list.id) }}" class="btn btn-sm btn-info">Lihat <i class="fas fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center py-4 animate-fade-in-up delay-6">Belum ada To-Do List yang dibagikan kepada Anda.</p>
+        {% endif %}
+    </div>
+    #}
+
+</div>
 {% endblock %}

@@ -1,4 +1,5 @@
 {# templates/shared/sidebar.html #}
+<<<<<<< HEAD
 <div class="sidebar" id="main-sidebar">
     <button class="sidebar-toggle-btn" id="sidebar-toggle">
         <i class="fas fa-bars"></i>
@@ -43,3 +44,59 @@
         </li>
     </ul>
 </div>
+=======
+<aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h4 class="app-logo">SecureSync</h4>
+        <button id="sidebar-toggle" class="sidebar-toggle-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    <nav class="sidebar-nav">
+        <ul class="list-unstyled">
+            <li class="nav-item">
+                <a href="{{ url_for('main.dashboard') }}" class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}">
+                    <i class="fas fa-fw fa-columns"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('main.create_todo') }}" class="nav-link {% if request.endpoint == 'main.create_todo' %}active{% endif %}">
+                    <i class="fas fa-fw fa-plus-circle"></i>
+                    <span>Buat To-Do Baru</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('main.my_todo_lists') }}" class="nav-link {% if request.endpoint == 'main.my_todo_lists' %}active{% endif %}">
+                    <i class="fas fa-fw fa-list-check"></i>
+                    <span>To-Do List Saya</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('main.shared_todo_lists') }}" class="nav-link {% if request.endpoint == 'main.shared_todo_lists' %}active{% endif %}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Dibagikan ke Saya</span>
+                </a>
+            </li>
+            {% if current_user.role == 'admin' %}
+            <li class="nav-item">
+                <a href="{{ url_for('main.admin_panel') }}" class="nav-link {% if request.endpoint == 'main.admin_panel' %}active{% endif %}">
+                    <i class="fas fa-fw fa-user-shield"></i>
+                    <span>Admin Panel</span>
+                </a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a href="{{ url_for('main.logout') }}" class="nav-link">
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="sidebar-footer">
+        <p>User: {{ current_user.username }}</p>
+        <p class="user-id">ID: {{ current_user.id }}</p>
+    </div>
+</aside>
+>>>>>>> Develop

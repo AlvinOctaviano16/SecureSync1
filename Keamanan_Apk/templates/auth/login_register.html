@@ -1,5 +1,5 @@
 {# templates/auth/login_register.html #}
-{% extends "base.html" %}
+{% extends "shared/base.html" %}    
 
 {% block content %}
 <div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 120px);"> {# Adjust min-height to account for fixed navbar #}
@@ -87,14 +87,14 @@
             showRegisterLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 showForm('register');
-                history.pushState(null, '', '{{ url_for("main.login", form="register") }}'); // Update URL tanpa reload
+                history.pushState(null, '', '{{ url_for("main.login_register", form="register") }}'); // Update URL tanpa reload
             });
         }
         if (showLoginLink) {
             showLoginLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 showForm('login');
-                history.pushState(null, '', '{{ url_for("main.login", form="login") }}'); // Update URL tanpa reload
+                history.pushState(null, '', '{{ url_for("main.login_register", form="login") }}'); // Update URL tanpa reload
             });
         }
 
