@@ -69,5 +69,81 @@
         {% else %}
             <p class="text-gray-400">Belum ada aktivitas yang tercatat.</p>
         {% endif %}
+=======
+{# templates/todos/admin_panel.html #}
+{% extends "base.html" %}
+{% block content %}
+    <div class="container"> {# Bungkus konten dengan container Bootstrap #}
+        <h2 class="card-title mb-6 text-center">Admin Panel</h2> {# Gunakan card-title dari style.css #}
+        <p class="card-text text-center mb-8">Kelola pengguna dan lihat log aktivitas sistem.</p> {# Gunakan card-text #}
+
+        <div class="card card-custom p-6 mb-8 mx-auto" style="max-width: 800px; width: 100%;"> {# Gunakan card-custom dari style.css #}
+            <h3 class="card-title mb-4">Manajemen Pengguna</h3> {# Gunakan card-title #}
+            <p class="card-text mb-4">Reset password pengguna ke password sementara. Informasikan password baru secara aman kepada mereka.</p> {# Gunakan card-text #}
+            {% if users %}
+                <table class="table table-custom w-full text-left rounded-lg overflow-hidden"> {# Gunakan table-custom dari style.css #}
+                    <thead>
+                        <tr>
+                            <th class="p-3">ID</th>
+                            <th class="p-3">Username</th>
+                            <th class="p-3">Role</th>
+                            <th class="p-3">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_item in users %}
+                        <tr>
+                            <td class="p-3 border-b">{{ user_item.id }}</td>
+                            <td class="p-3 border-b">{{ user_item.username }}</td>
+                            <td class="p-3 border-b">{{ user_item.role | capitalize }}</td>
+                            <td class="p-3 border-b">
+                                {# Tombol reset password, hanya untuk user yang BUKAN admin atau bukan diri sendiri #}
+                                {% if user_item.username != 'admin' and user_item.id != current_user.id %}
+                                <form action="{{ url_for('main.admin_reset_password', user_id=user_item.id) }}" method="POST" onsubmit="return confirm('Yakin ingin mereset password {{ user_item.username }}?');">
+                                    <button type="submit" class="btn btn-info btn-sm px-4 py-2 rounded-lg text-sm shadow-md transition-all duration-200">Reset Password</button> {# Gunakan btn-info #}
+                                </form>
+                                {% else %}
+                                    <span class="card-text text-sm">Tidak bisa direset</span> {# Gunakan card-text #}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="card-text">Tidak ada pengguna yang terdaftar.</p> {# Gunakan card-text #}
+            {% endif %}
+        </div>
+
+        <div class="card card-custom p-6 mx-auto" style="max-width: 800px; width: 100%;"> {# Gunakan card-custom #}
+            <h3 class="card-title mb-4">Log Aktivitas Sistem</h3> {# Gunakan card-title #}
+            <p class="card-text mb-4">Ini adalah catatan aktivitas penting dalam aplikasi.</p> {# Gunakan card-text #}
+
+            {% if logs %}
+                <table class="table table-custom w-full text-left rounded-lg overflow-hidden"> {# Gunakan table-custom #}
+                    <thead>
+                        <tr>
+                            <th class="p-3">Waktu</th>
+                            <th class="p-3">Pengguna</th>
+                            <th class="p-3">Aksi</th>
+                            <th class="p-3">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td class="p-3 border-b">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td class="p-3 border-b">{{ log.actor.username if log.actor else 'SYSTEM' }}</td>
+                            <td class="p-3 border-b">{{ log.action }}</td>
+                            <td class="p-3 border-b">{{ log.details }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="card-text">Belum ada aktivitas yang tercatat.</p> {# Gunakan card-text #}
+            {% endif %}
+        </div>
+>>>>>>> Develop
     </div>
 {% endblock %}

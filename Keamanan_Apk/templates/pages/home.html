@@ -1,26 +1,24 @@
-{% extends "base.html" %}
+{% extends "shared/base.html" %}
 
 {% block content %}
 
 <div class="container-fluid p-0">
-    <!-- Hero Section -->
     <section id="top" class="hero-section">
         <div class="container">
             {# Conditional Greeting or Main Title #}
             {% if current_user.is_authenticated %}
                 <h1 class="personal-greeting-text">Halo, {{ current_user.username }}</h1> {# Ini akan menerapkan gradasi ke seluruh teks #}
                 <p class="subtitle">Selamat datang di SecureSync, kelola tugas Anda dengan aman.</p>
-                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg fw-bold btn-hero">Lihat Dashboard Saya</a>
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg fw-bold btn-hero">Lihat Dashboard Saya</a>
             {% else %}
                 <h1 class="main-title">SecureSync</h1>
                 <p class="subtitle">Kelola tugas-tugas Anda dengan keamanan tak tertandingi dan kolaborasi tanpa batas.</p>
-                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg fw-bold btn-hero me-3">Login</a>
-                <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg fw-bold btn-hero">Daftar Sekarang</a>
+                <a href="{{ url_for('main.login_register') }}" class="btn btn-primary btn-lg fw-bold btn-hero me-3">Login</a>
+                <a href="{{ url_for('main.login_register', form='register') }}" class="btn btn-outline-light btn-lg fw-bold btn-hero">Daftar Sekarang</a>
             {% endif %}
         </div>
     </section>
 
-    <!-- Info/Features Section (Services) -->
     <section id="services-section" class="info-section text-center container">
         <h3 class="mb-5">Mengapa Memilih SecureSync?</h3>
         
@@ -52,7 +50,6 @@
     </section>
 
 
-    <!-- About Us Section -->
     <section id="about-section" class="about-section">
         <div class="container">
             <h3 class="mb-4">Tentang SecureSync</h3>
@@ -62,7 +59,6 @@
     </section>
 <div class="section-divider"> </div>
 
-    <!-- FAQ Section -->
     <section id="faq-section" class="faq-section">
         <div class="container"> {# Bungkus konten FAQ dengan container #}
             <h3 class="mb-5">Pertanyaan yang Sering Diajukan</h3>
@@ -120,7 +116,6 @@
     </section>
 
 
-    <!-- Footer Section -->
     <footer class="footer-section text-center">
         <div class="container">
             <p class="mb-0">&copy; 2025 SecureSync To-Do List. Hak Cipta Dilindungi Undang-Undang.</p>

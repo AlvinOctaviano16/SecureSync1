@@ -1,80 +1,85 @@
+{# templates/todos/todo_list_detail.html #}
 {% extends "base.html" %}
 {% block content %}
-    <h2>{{ todo_list.name }}</h2>
-    <p>Owner: <strong>{{ todo_list.owner.username }}</strong></p>
-    <p>Izin Anda: <strong>{{ permission }}</strong></p>
+    <div class="container"> {# Bungkus konten dengan container Bootstrap #}
+        <h2 class="card-title">{{ todo_list.name }}</h2> {# Gunakan card-title #}
+        <p class="card-text">Owner: <strong>{{ todo_list.owner.username }}</strong></p> {# Gunakan card-text #}
+        <p class="card-text">Izin Anda: <strong>{{ permission }}</strong></p> {# Gunakan card-text #}
 
-    {# Bagian untuk menambah tugas baru, hanya terlihat oleh owner atau member dengan izin 'write' #}
-    {% if permission == 'owner' or permission == 'write' %}
+        {# Bagian untuk menambah tugas baru, hanya terlihat oleh owner atau member dengan izin 'write' #}
+        {% if permission == 'owner' or permission == 'write' %}
+            <hr>
+            <h3 class="card-title mt-4 mb-4">Tambah Tugas Baru</h3> {# Gunakan card-title #}
+            <form method="POST" action="{{ url_for('main.add_task', todo_id=todo_list.id) }}" class="mb-4">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Judul Tugas</label>
+                    <input type="text" class="form-control rounded-pill px-3 py-2" id="title" name="title" required placeholder="Masukkan judul tugas">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Deskripsi Tugas (Akan dienkripsi)</label>
+                    <textarea class="form-control rounded-pill px-3 py-2" id="description" name="description" rows="3" required placeholder="Masukkan deskripsi tugas"></textarea>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">Tambah Tugas</button>
+                </div>
+            </form>
+        {% else %}
+            <div class="alert alert-info">Anda memiliki izin **{{ permission }}** untuk To-Do List ini. Anda tidak dapat menambah atau menghapus tugas.</div>
+        {% endif %}
+
         <hr>
-        <h3>Tambah Tugas Baru</h3>
-        <form method="POST" action="{{ url_for('add_task', todo_id=todo_list.id) }}" class="mb-4">
-            <div class="mb-3">
-                <label for="title" class="form-label">Judul Tugas</label>
-                <input type="text" class="form-control" id="title" name="title" required>
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Deskripsi Tugas (Akan dienkripsi)</label>
-                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-success">Tambah Tugas</button>
-        </form>
-    {% else %}
-        <div class="alert alert-info">Anda memiliki izin **{{ permission }}** untuk To-Do List ini. Anda tidak dapat menambah atau menghapus tugas.</div>
-    {% endif %}
-
-    <hr>
-    <h3>Daftar Tugas</h3>
-    {% if tasks %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Judul</th>
-                    <th>Deskripsi (Didekripsi)</th>
-                    <th>Status</th>
-                    <th>Dibuat Oleh</th>
-                    {# Kolom Aksi hanya tampil jika user memiliki izin owner atau write #}
-                    {% if permission == 'owner' or permission == 'write' %}
-                        <th>Aksi</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for task in tasks %}
-                <tr>
-                    <td>{{ task.title }}</td>
-                    <td>{{ task.get_description() }}</td> {# Dekripsi otomatis saat ditampilkan #}
-                    <td>
-                        {# Form untuk update status, hanya terlihat dan bisa diinteraksi jika user memiliki izin owner atau write #}
+        <h3 class="card-title mt-4 mb-4">Daftar Tugas</h3> {# Gunakan card-title #}
+        {% if tasks %}
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Judul</th>
+                        <th>Deskripsi (Didekripsi)</th>
+                        <th>Status</th>
+                        <th>Dibuat Oleh</th>
+                        {# Kolom Aksi hanya tampil jika user memiliki izin owner atau write #}
                         {% if permission == 'owner' or permission == 'write' %}
-                        <form action="{{ url_for('update_task_status', task_id=task.id) }}" method="POST" style="display:inline;">
-                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-                                <option value="pending" {% if task.status == 'pending' %}selected{% endif %}>Pending</option>
-                                <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
-                            </select>
-                        </form>
-                        {% else %}
-                            {# Jika tidak ada izin write, hanya tampilkan statusnya #}
-                            <span class="badge bg-{{ 'success' if task.status == 'completed' else 'warning' }}">{{ task.status | capitalize }}</span>
+                            <th>Aksi</th>
                         {% endif %}
-                    </td>
-                    <td>{{ task.creator.username }}</td>
-                    {# Tombol hapus tugas, hanya tampil jika user adalah owner #}
-                    {% if permission == 'owner' %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.get_description() }}</td> {# Dekripsi otomatis saat ditampilkan #}
                         <td>
-                            <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus tugas ini?');">Hapus</button>
+                            {# Form untuk update status, hanya terlihat dan bisa diinteraksi jika user memiliki izin owner atau write #}
+                            {% if permission == 'owner' or permission == 'write' %}
+                            <form action="{{ url_for('main.update_task_status', task_id=task.id) }}" method="POST" style="display:inline;">
+                                <select name="status" class="form-select form-select-sm rounded-pill px-3 py-2" onchange="this.form.submit()">
+                                    <option value="pending" {% if task.status == 'pending' %}selected{% endif %}>Pending</option>
+                                    <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
+                                </select>
                             </form>
+                            {% else %}
+                                {# Jika tidak ada izin write, hanya tampilkan statusnya #}
+                                <span class="badge bg-{{ 'success' if task.status == 'completed' else 'warning' }}">{{ task.status | capitalize }}</span>
+                            {% endif %}
                         </td>
-                    {% else %}
-                        <td>-</td> {# Tampilkan tanda strip jika tidak ada izin untuk aksi #}
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        {# Pesan jika belum ada tugas #}
-        <p>Belum ada tugas di To-Do List ini.</p>
-    {% endif %}
+                        <td>{{ task.creator.username }}</td>
+                        {# Tombol hapus tugas, hanya tampil jika user adalah owner #}
+                        {% if permission == 'owner' %}
+                            <td>
+                                <form action="{{ url_for('main.delete_task', task_id=task.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus tugas ini?');">Hapus</button>
+                                </form>
+                            </td>
+                        {% else %}
+                            <td>-</td> {# Tampilkan tanda strip jika tidak ada izin untuk aksi #}
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            {# Pesan jika belum ada tugas #}
+            <p class="card-text">Belum ada tugas di To-Do List ini.</p>
+        {% endif %}
+    </div> {# Tutup container #}
 {% endblock %}
