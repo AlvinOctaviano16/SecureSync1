@@ -40,7 +40,7 @@
                         <a class="nav-link" href="{{ url_for('main.home') }}#faq-section">FAQ</a>
                     </li>
 
-                    {# Conditional Login/Logout/Dashboard/Admin #}
+                     {# Conditional Login/Logout/Dashboard/Admin #}
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('main.dashboard') }}">Dashboard</a>
@@ -54,13 +54,7 @@
                             <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                         </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('main.login_register') }}">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('main.login_register', form='register') }}">Register</a>
-                        </li>
-                    {% endif %}
+                        {% endif %}
                 </ul>
             </div>
         </div>

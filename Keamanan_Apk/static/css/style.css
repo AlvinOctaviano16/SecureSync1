@@ -81,6 +81,14 @@ body {
     position: relative; /* Container harus relatif agar slider bisa absolut */
 }
 
+.navbar-nav .nav-link.hover-outline {
+
+  outline: 2px solid rgba(192, 199, 212, 0.6); 
+  outline-offset: 0px; 
+  border-radius: 48px; 
+  transition: none; 
+}
+
 /* GAYA BARU UNTUK SLIDER */
 .nav-slider {
     position: absolute;
@@ -99,6 +107,8 @@ body {
 .navbar-nav .nav-item {
     margin: 0 5px; /* Spasi antar item navigasi, sedikit lebih rapat */
 }
+
+
 
 /* Gaya untuk link navigasi (default) */
 .navbar-custom .nav-link {
