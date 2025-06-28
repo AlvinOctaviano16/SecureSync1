@@ -3,14 +3,16 @@ import os
 
 class Config:
     # Kunci Rahasia untuk Flask (GANTI INI DENGAN KUNCI KUAT & UNIK!)
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your_super_secret_key_here_for_flask_session_default_kuat'
+    # Gunakan os.environ.get untuk produksi, atau string default untuk development
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'kunci_rahasia_super_unik_dan_panjang_sekali_ini_mesti_diganti_nanti'
 
     # Konfigurasi Database SQLite
-    # app.root_path akan merujuk ke direktori 'app'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///instance/site.db' # Lokasi site.db di dalam folder instance
+    # basedir akan merujuk ke direktori tempat config.py berada (yaitu root proyek)
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'instance', 'site.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Kunci Enkripsi Fernet (GANTI INI DENGAN KUNCI YANG ANDA DAPATKAN!)
-    # Penting: Kunci ini harus sama dengan yang Anda dapatkan dari terminal!
+    # Ini harus dalam bentuk bytes (diawali 'b')
     # Contoh: b't7tqK5Ba9xS6eQHgN6GLpF94cYlgdAKxY-tAVmO14y0='
-    FERNET_KEY = os.environ.get('FERNET_KEY') or b'YOUR_GENERATED_FERNET_KEY_HERE_PASTE_IT_FROM_TERMINAL_OUTPUT='
+    FERNET_KEY = os.environ.get('FERNET_KEY') or b'gAAAAABmXpZ...ANDA_HARUS_GANTI_INI_DENGAN_KEY_ASLI_ANDA='

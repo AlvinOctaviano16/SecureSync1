@@ -1,4 +1,4 @@
-{# templates/sidebar.html #}
+{# templates/shared/sidebar.html #}
 <div class="sidebar" id="main-sidebar">
     <button class="sidebar-toggle-btn" id="sidebar-toggle">
         <i class="fas fa-bars"></i>
@@ -7,37 +7,37 @@
         <div id="sidebar-active-indicator"></div> {# Indikator aktif sidebar #}
         {# Link di sidebar selalu muncul ketika sidebar aktif #}
         <li class="sidebar-nav-item">
-            <a class="sidebar-nav-link" data-target-id="dashboard-page" href="{{ url_for('dashboard') }}">
+            <a class="sidebar-nav-link" data-target-id="dashboard-page" href="{{ url_for('main.dashboard') }}">
                 <i class="fas fa-tachometer-alt icon"></i> <span class="text">Dashboard</span>
             </a>
         </li>
         {# Admin Panel hanya untuk admin #}
         {% if current_user.role == 'admin' %}
         <li class="sidebar-nav-item">
-            <a class="sidebar-nav-link" data-target-id="admin-panel-page" href="{{ url_for('admin_panel') }}">
+            <a class="sidebar-nav-link" data-target-id="admin-panel-page" href="{{ url_for('main.admin_panel') }}">
                 <i class="fas fa-user-shield icon"></i> <span class="text">Admin Panel</span>
             </a>
         </li>
         {% endif %}
         {# Link Services, About Us, FAQ #}
         <li class="sidebar-nav-item">
-            <a class="sidebar-nav-link" data-target-id="services-page" href="{{ url_for('services') }}">
+            <a class="sidebar-nav-link" data-target-id="services-page" href="{{ url_for('main.services') }}">
                 <i class="fas fa-cogs icon"></i> <span class="text">Services</span>
             </a>
         </li>
         <li class="sidebar-nav-item">
-            <a class="sidebar-nav-link" data-target-id="about-page" href="{{ url_for('about') }}">
+            <a class="sidebar-nav-link" data-target-id="about-page" href="{{ url_for('main.about') }}">
                 <i class="fas fa-info-circle icon"></i> <span class="text">About Us</span>
             </a>
         </li>
         <li class="sidebar-nav-item">
-            <a class="sidebar-nav-link" data-target-id="faq-page" href="{{ url_for('home') }}#faq-section">
+            <a class="sidebar-nav-link" data-target-id="faq-page" href="{{ url_for('main.home') }}#faq-section">
                 <i class="fas fa-question-circle icon"></i> <span class="text">FAQ</span>
             </a>
         </li>
         {# Link Logout #}
         <li class="sidebar-nav-item">
-            <a class="sidebar-nav-link" data-target-id="logout-action" href="{{ url_for('logout') }}">
+            <a class="sidebar-nav-link" data-target-id="logout-action" href="{{ url_for('main.logout') }}">
                 <i class="fas fa-sign-out-alt icon"></i> <span class="text">Logout ({{ current_user.username }})</span>
             </a>
         </li>
