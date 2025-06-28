@@ -1,47 +1,70 @@
+{# templates/home.html #}
 {% extends "shared/base.html" %}
 
 {% block content %}
 
 <div class="container-fluid p-0">
     <section id="top" class="hero-section">
-        <div class="container">
+        <div class="container text-center">
             {# Conditional Greeting or Main Title #}
             {% if current_user.is_authenticated %}
-                <h1 class="personal-greeting-text">Halo, {{ current_user.username }}</h1> {# Ini akan menerapkan gradasi ke seluruh teks #}
-                <p class="subtitle">Selamat datang di SecureSync, kelola tugas Anda dengan aman.</p>
-                <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg fw-bold btn-hero">Lihat Dashboard Saya</a>
+                <h1 class="personal-greeting-text animate-fade-in-up">Halo, {{ current_user.username }}</h1>
+                <p class="subtitle animate-fade-in-up delay-1">Selamat datang di SecureSync, kelola tugas Anda dengan aman.</p>
+                <div class="hero-buttons animate-fade-in-up delay-2">
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg fw-bold btn-hero">Lihat Dashboard Saya</a>
+                </div>
             {% else %}
-                <h1 class="main-title">SecureSync</h1>
-                <p class="subtitle">Kelola tugas-tugas Anda dengan keamanan tak tertandingi dan kolaborasi tanpa batas.</p>
-                <a href="{{ url_for('main.login_register') }}" class="btn btn-primary btn-lg fw-bold btn-hero me-3">Login</a>
-                <a href="{{ url_for('main.login_register', form='register') }}" class="btn btn-outline-light btn-lg fw-bold btn-hero">Daftar Sekarang</a>
+                <h1 class="main-title animate-fade-in-up">SecureSync</h1>
+                <p class="subtitle animate-fade-in-up delay-1">Kelola tugas-tugas Anda dengan keamanan tak tertandingi dan kolaborasi tanpa batas.</p>
+                <div class="hero-buttons animate-fade-in-up delay-2">
+                    <a href="{{ url_for('main.login_register') }}" class="btn btn-primary btn-lg fw-bold btn-hero me-3">Login</a>
+                    <a href="{{ url_for('main.login_register', form='register') }}" class="btn btn-outline-light btn-lg fw-bold btn-hero">Daftar Sekarang</a>
+                </div>
             {% endif %}
+        </div>
+        <!-- Shape Divider, more complex and abstract -->
+        <div class="hero-shape-divider">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M985.66,92.83C906.67,72,823.7,29.64,742.64,3.18c-87.27-28.42-159.28-3.04-261.44,14.67C309.85,51.5,168,101.52,0,121.32V0H1200V92.83Z" class="shape-fill"></path>
+            </svg>
         </div>
     </section>
 
     <section id="services-section" class="info-section text-center container">
-        <h3 class="mb-5">Mengapa Memilih SecureSync?</h3>
+        <h3 class="mb-5 animate-fade-in-up">Mengapa Memilih SecureSync?</h3>
         
-    {# Section Divider #}
-    <div class="section-divider"> </div>
         <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-item">
-                    <span class="icon">🔒</span>
+            <div class="col-md-6 col-lg-4 d-flex">
+                <div class="feature-item animate-fade-in-up delay-0">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-shield-lock-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.567-1.113.325-2.23.83-3.243 1.39C.686 3.565 0 4.249 0 5.08c0 1.5.614 2.333 1.36 2.93c.609.463 1.244.957 1.838 1.412.58.453 1.21.91 1.772 1.342.34.27.71.528 1.05.75c.877.592 1.787.92 2.673.92s1.796-.328 2.673-.92c.34-.222.71-.48 1.05-.75.562-.432 1.192-.899 1.772-1.342.594-.455 1.229-.949 1.838-1.412C15.386 7.413 16 6.58 16 5.08c0-.831-.686-1.515-1.678-2.06C12.23 1.39 11.113.885 10 .567 8.928.265 7.69 0 8 0m0 5a1 1 0 0 1 1 1v2.5a.5.5 0 0 1-1 0V6a1 1 0 0 1-1-1m-2 1a2 2 0 1 0 4 0 2 2 0 0 0-4 0"/>
+                        </svg>
+                    </div>
                     <h4>Keamanan Data Terjamin</h4>
                     <p>Deskripsi tugas Anda dienkripsi untuk privasi maksimal, memastikan data sensitif Anda aman dari akses tidak sah.</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-item">
-                    <span class="icon">🤝</span>
+            <div class="col-md-6 col-lg-4 d-flex">
+                <div class="feature-item animate-fade-in-up delay-1">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                        </svg>
+                    </div>
                     <h4>Kolaborasi Cerdas</h4>
                     <p>Bagikan To-Do List dengan tim Anda. Kontrol penuh atas siapa yang dapat melihat, menambah, atau mengedit tugas.</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-item">
-                    <span class="icon">📊</span>
+            <div class="col-md-6 col-lg-4 d-flex">
+                <div class="feature-item animate-fade-in-up delay-2">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-journal-check" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                            <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                            <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-.5v.5a.5.5 0 0 1-1 0V6h-.5a.5.5 0 0 1 0-1z"/>
+                        </svg>
+                    </div>
                     <h4>Audit Aktivitas</h4>
                     <p>Lacak setiap aksi penting di aplikasi dengan log aktivitas terperinci, memberikan transparansi dan akuntabilitas.</p>
                 </div>
@@ -49,27 +72,29 @@
         </div>
     </section>
 
+    <div class="section-divider"></div>
 
     <section id="about-section" class="about-section">
-        <div class="container">
-            <h3 class="mb-4">Tentang SecureSync</h3>
-            <p>SecureSync adalah platform inovatif yang dirancang untuk merevolusi cara Anda mengelola tugas dan berkolaborasi. Kami percaya pada kekuatan keamanan digital dan efisiensi, yang menjadi inti dari setiap fitur yang kami tawarkan.</p>
-            <p class="mt-3">Dibangun untuk demonstrasi tugas Keamanan Digital, SecureSync menyoroti pentingnya Autentikasi, Otorisasi, Enkripsi data, dan Akuntansi aktivitas dalam ekosistem digital saat ini. Misi kami adalah memberdayakan pengguna dengan alat yang tidak hanya produktif tetapi juga memberikan ketenangan pikiran.</p>
+        <div class="container text-center">
+            <h3 class="mb-4 animate-fade-in-up">Tentang SecureSync</h3>
+            <p class="animate-fade-in-up delay-0">SecureSync adalah platform inovatif yang dirancang untuk merevolusi cara Anda mengelola tugas dan berkolaborasi. Kami percaya pada kekuatan keamanan digital dan efisiensi, yang menjadi inti dari setiap fitur yang kami tawarkan.</p>
+            <p class="mt-3 animate-fade-in-up delay-1">Dibangun untuk demonstrasi tugas Keamanan Digital, SecureSync menyoroti pentingnya Autentikasi, Otorisasi, Enkripsi data, dan Akuntansi aktivitas dalam ekosistem digital saat ini. Misi kami adalah memberdayakan pengguna dengan alat yang tidak hanya produktif tetapi juga memberikan ketenangan pikiran.</p>
         </div>
     </section>
-<div class="section-divider"> </div>
+
+    <div class="section-divider"></div>
 
     <section id="faq-section" class="faq-section">
-        <div class="container"> {# Bungkus konten FAQ dengan container #}
-            <h3 class="mb-5">Pertanyaan yang Sering Diajukan</h3>
-            <div class="accordion" id="faqAccordion">
+        <div class="container text-center">
+            <h3 class="mb-5 animate-fade-in-up">Pertanyaan yang Sering Diajukan</h3>
+            <div class="accordion animate-fade-in-up delay-0" id="faqAccordion">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                             Apakah data tugas saya benar-benar aman?
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
                         <div class="accordion-body">
                             Ya, deskripsi tugas Anda dienkripsi menggunakan standar kriptografi modern (Fernet) sebelum disimpan ke database. Hanya pengguna yang berhak dan terotentikasi yang dapat mendekripsinya.
                         </div>
@@ -114,7 +139,6 @@
             </div>
         </div>
     </section>
-
 
     <footer class="footer-section text-center">
         <div class="container">
