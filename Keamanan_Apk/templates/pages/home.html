@@ -1,42 +1,33 @@
-<<<<<<< HEAD
-=======
 {# templates/home.html #}
->>>>>>> Develop
 {% extends "shared/base.html" %}
 
 {% block content %}
-
 <div class="container-fluid p-0">
     <section id="top" class="hero-section">
         <div class="container text-center">
-            {# Conditional Greeting or Main Title #}
+            
             {% if current_user.is_authenticated %}
-<<<<<<< HEAD
-                <h1 class="personal-greeting-text">Halo, {{ current_user.username }}</h1> {# Ini akan menerapkan gradasi ke seluruh teks #}
-                <p class="subtitle">Selamat datang di SecureSync, kelola tugas Anda dengan aman.</p>
-                <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg fw-bold btn-hero">Lihat Dashboard Saya</a>
-            {% else %}
-                <h1 class="main-title">SecureSync</h1>
-                <p class="subtitle">Kelola tugas-tugas Anda dengan keamanan tak tertandingi dan kolaborasi tanpa batas.</p>
-                <a href="{{ url_for('main.login_register') }}" class="btn btn-primary btn-lg fw-bold btn-hero me-3">Login</a>
-                <a href="{{ url_for('main.login_register', form='register') }}" class="btn btn-outline-light btn-lg fw-bold btn-hero">Daftar Sekarang</a>
-=======
+                
+                {# Tampilan untuk pengguna yang sudah login #}
                 <h1 class="personal-greeting-text animate-fade-in-up">Halo, {{ current_user.username }}</h1>
                 <p class="subtitle animate-fade-in-up delay-1">Selamat datang di SecureSync, kelola tugas Anda dengan aman.</p>
                 <div class="hero-buttons animate-fade-in-up delay-2">
                     <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg fw-bold btn-hero">Lihat Dashboard Saya</a>
                 </div>
+
             {% else %}
+
+                {# Tampilan untuk pengunjung (belum login) #}
                 <h1 class="main-title animate-fade-in-up">SecureSync</h1>
                 <p class="subtitle animate-fade-in-up delay-1">Kelola tugas-tugas Anda dengan keamanan tak tertandingi dan kolaborasi tanpa batas.</p>
                 <div class="hero-buttons animate-fade-in-up delay-2">
                     <a href="{{ url_for('main.login_register') }}" class="btn btn-primary btn-lg fw-bold btn-hero me-3">Login</a>
                     <a href="{{ url_for('main.login_register', form='register') }}" class="btn btn-outline-light btn-lg fw-bold btn-hero">Daftar Sekarang</a>
                 </div>
->>>>>>> Develop
+
             {% endif %}
+
         </div>
-        <!-- Shape Divider, more complex and abstract -->
         <div class="hero-shape-divider">
             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
                 <path d="M985.66,92.83C906.67,72,823.7,29.64,742.64,3.18c-87.27-28.42-159.28-3.04-261.44,14.67C309.85,51.5,168,101.52,0,121.32V0H1200V92.83Z" class="shape-fill"></path>
@@ -96,11 +87,8 @@
         </div>
     </section>
 
-<<<<<<< HEAD
-=======
     <div class="section-divider"></div>
 
->>>>>>> Develop
     <section id="faq-section" class="faq-section">
         <div class="container text-center">
             <h3 class="mb-5 animate-fade-in-up">Pertanyaan yang Sering Diajukan</h3>
@@ -157,10 +145,6 @@
         </div>
     </section>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> Develop
     <footer class="footer-section text-center">
         <div class="container">
             <p class="mb-0">&copy; 2025 SecureSync To-Do List. Hak Cipta Dilindungi Undang-Undang.</p>

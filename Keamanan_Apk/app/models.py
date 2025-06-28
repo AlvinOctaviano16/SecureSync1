@@ -1,18 +1,4 @@
 # app/models.py
-<<<<<<< HEAD
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
-from datetime import datetime
-from bcrypt import hashpw, gensalt, checkpw
-from cryptography.fernet import Fernet
-from flask import current_app
-
-# db tidak diinisialisasi di sini, akan diinisialisasi di __init__.py
-db = SQLAlchemy()
-
-# --- MODEL DATABASE (Definisi Tabel) ---
-class User(db.Model, UserMixin):
-=======
 
 from app import db 
 from flask_login import UserMixin
@@ -22,7 +8,6 @@ from cryptography.fernet import Fernet
 from flask import current_app 
 
 class User(UserMixin, db.Model):
->>>>>>> Develop
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     # DIKOREKSI: Mengubah nama kolom dari 'password_hash' menjadi 'password'
@@ -44,15 +29,6 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
-<<<<<<< HEAD
-    def set_password(self, password_text):
-        self.password = hashpw(password_text.encode('utf-8'), gensalt()).decode('utf-8')
-
-    def check_password(self, password_text):
-        return checkpw(password_text.encode('utf-8'), self.password.encode('utf-8'))
-
-=======
->>>>>>> Develop
 class ToDoList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
@@ -66,34 +42,6 @@ class ToDoList(db.Model):
     def __repr__(self):
         return f'<ToDoList {self.name}>'
 
-<<<<<<< HEAD
-class Task(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    todo_list_id = db.Column(db.Integer, db.ForeignKey('to_do_list.id'), nullable=False)
-    title = db.Column(db.String(100), nullable=False)
-    description_encrypted = db.Column(db.LargeBinary, nullable=False)
-    status = db.Column(db.String(20), default='pending', nullable=False)
-    created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def __repr__(self):
-        return f"Task('{self.title}', Status:'{self.status}')"
-
-    def set_description(self, description_text):
-        cipher_suite = current_app.config.get('CIPHER_SUITE')
-        if not cipher_suite:
-            raise RuntimeError("Fernet cipher_suite not configured. Please set app.config['CIPHER_SUITE'].")
-        self.description_encrypted = cipher_suite.encrypt(description_text.encode('utf-8'))
-
-    def get_description(self):
-        cipher_suite = current_app.config.get('CIPHER_SUITE')
-        if not cipher_suite:
-            raise RuntimeError("Fernet cipher_suite not configured. Please set app.config['CIPHER_SUITE'].")
-        return cipher_suite.decrypt(self.description_encrypted).decode('utf-8')
-
-=======
->>>>>>> Develop
 class ToDoListMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     todo_list_id = db.Column(db.Integer, db.ForeignKey('to_do_list.id'), nullable=False)
