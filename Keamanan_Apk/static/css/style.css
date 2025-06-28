@@ -12,12 +12,19 @@
     --dm-nav-item-hover-bg: #2B2B2B; /* Latar belakang hover baru, sedikit lebih terang dari dark-gray */
     --dm-nav-item-hover-border: #444444; /* Border halus saat hover */
     --dm-active-shadow-color: rgba(0, 123, 255, 0.7); /* Warna bayangan aktif lebih pekat */
-    --dm-accordion-bg: #222222; /* Warna latar belakang untuk accordion item */
+    --dm-accordion-bg: transparent; /* Latar belakang transparan untuk accordion item */
     --dm-accordion-border: #444444; /* Warna border untuk accordion item */
     --dm-accordion-header-bg-collapsed: #282828; /* Latar belakang header saat collapsed */
     --dm-accordion-header-bg-active: #303030; /* Latar belakang header saat aktif */
     --dm-accordion-button-color: var(--dm-white); /* Warna teks tombol accordion */
     --dm-accordion-icon-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(200%) contrast(100%); /* Filter untuk ikon panah accordion */
+    --dm-accordion-shadow-color: rgba(0, 123, 255, 0.4); /* Warna shadow untuk accordion */
+
+    /* NEW: Dashboard Specific Variables */
+    --dm-sidebar-width: 250px;
+    --dm-sidebar-collapsed-width: 80px;
+    --dm-sidebar-bg: #1A1A1A; /* Sama dengan dark-gray */
+    --dm-dashboard-bg: #050505; /* Sama dengan black */
 }
 
 body {
@@ -32,13 +39,11 @@ body {
     display: flex; /* Menggunakan flexbox untuk layout utama */
     flex-direction: column; /* Mengatur item flex secara kolom */
     
-    /* Latar belakang global untuk body, akan terlihat di belakang navbar */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), /* Overlay gelap */
-                      url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD09IjAgMCAxMjAwIDYwMCI+CiAgICA8ZGVmcz4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWTDPSJncml2aXR5R215Z3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjNjE2QkY0IiBvZmZzZXQ9IjUwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIxMDAlIi8+CiAgICAgICAgPC9kZWZzPgogICAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzA1MDUwNSIvPgogICAgPHBhdGggZD0iTTAgBDBMMjAwIDYwMEwxMDAwIDYwMEwxMjAwIDBaTTQwMCAwTDYwMCA2MDBMODAwIDYwMEwxMDAwIDBaIiBmaWxsPSJ1cmwoI2dtaUdyYWRpZW50KSIgZmlsbC1vcGFjaXR5PSIwLjE1Ii8+CiAgICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI0MDAiIHI9IjE1MCIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CiAgICA8Y2lyY2xlIGN4PSIxMDAwIiBjeT0iMTUwIiByPSIxMDAiIGZpbGw9InVybCgjZ21pR3JhZGlldCkiIGZpbGwtb3BhY2l0eT0iMC4yNSIvPgogICAgPHBhdGggZD0iTTUwMCA1MExyODAgNTBMMjgwMCAwWiIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==');
+    background-image: none; /* Menghapus gambar background SVG */
     background-size: cover;
     background-attachment: fixed; /* Membuat background tetap saat scroll */
     background-position: center center;
-    padding-top: 100px; /* Tambahkan padding ke body untuk mengkompensasi fixed navbar */
+    padding-top: 0; /* DIUBAH: Hapus padding top di body karena navbar fixed hanya di non-dashboard */
     scroll-behavior: smooth; /* Tambahkan ini untuk smooth scrolling */
 }
 
@@ -47,7 +52,7 @@ body {
     color: var(--dm-accent-blue) !important;
 }
 
-/* Navbar khusus */
+/* Navbar khusus (untuk non-dashboard pages) */
 .navbar-custom {
     background-color: var(--dm-dark-gray) !important; /* Navbar sedikit lebih terang dari background body */
     border: 1px solid var(--dm-border-color); /* Border untuk navbar keseluruhan */
@@ -145,9 +150,21 @@ body {
     align-items: center;
 }
 
+/* Styling Khusus untuk Dashboard Layout */
+.page-content-wrapper.dashboard-layout {
+    flex-direction: row; /* Sidebar dan konten berdampingan */
+    align-items: flex-start; /* Konten dimulai dari atas */
+    padding-top: 0; /* Hapus padding atas untuk layout dashboard */
+    min-height: 100vh; /* Memastikan layout dashboard mengisi seluruh tinggi viewport */
+}
+
 .main-content-area {
-    width: 100%; /* Main content area juga harus full width */
-    max-width: 100%; /* Hapus max-width */
+    flex-grow: 1; /* Ambil sisa ruang */
+    width: 100%; /* Default width */
+    max-width: 100%; /* Default max-width */
+    background-color: var(--dm-dashboard-bg); /* Latar belakang area konten utama dashboard */
+    min-height: 100vh; /* Agar main content setinggi viewport */
+    transition: margin-left 0.3s ease; /* Transisi saat sidebar toggle */
 }
 
 .main-content-container {
@@ -157,31 +174,6 @@ body {
     margin-right: auto;
     padding: 1.5rem; /* Tambahkan padding di sini untuk konten */
 }
-
-/* Kustomisasi alert Bootstrap untuk tema gelap */
-.alert-flash {
-    background-color: var(--dm-dark-gray) !important;
-    color: var(--dm-white) !important;
-    border: 1px solid var(--dm-border-color) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
-    padding: 1rem 1.5rem !important;
-    margin: 20px auto !important;
-    max-width: 500px;
-    text-align: center;
-    font-weight: 600;
-    display: block;
-}
-/* Override warna spesifik alert Bootstrap agar tetap terbaca */
-.alert-success { background-color: #008000 !important; border-color: #006400 !important; }
-.alert-info { background-color: #0056b3 !important; border-color: #003d7a !important; }
-.alert-warning { background-color: #8B4513 !important; border-color: #69340f !important; }
-.alert-danger { background-color: #8B0000 !important; border-color: #6a0000 !important; }
-/* Pastikan teks tetap putih di alert yang override warnanya */
-.alert-success, .alert-info, .alert-warning, .alert-danger {
-    color: var(--dm-white) !important;
-}
-
 
 /* General styling for cards (login, register, features) */
 .card {
@@ -325,7 +317,6 @@ body {
 
 /* --- CSS KHUSUS UNTUK HALAMAN HOME --- */
 .hero-section {
-    /* Latar belakang hero section sekarang hanya transparan */
     background-color: transparent; /* Pastikan transparan agar background body terlihat */
     color: var(--dm-white); /* Teks putih terang */
     padding: 10rem 0 8rem 0;
@@ -538,7 +529,7 @@ body {
 /* FAQ Section */
 .faq-section {
     padding: 5rem 0;
-    background-color: var(--dm-dark-gray); /* Konsisten dengan info-section */
+    background-color: transparent; /* Latar belakang transparan */
     border-radius: 0; /* Hapus border radius */
     margin-top: 0;
     margin-bottom: 60px;
@@ -565,12 +556,18 @@ body {
 }
 
 .accordion-item {
-    background-color: var(--dm-accordion-bg) !important;
-    border: 1px solid var(--dm-accordion-border) !important;
+    background-color: var(--dm-accordion-bg) !important; /* Transparan */
+    border: none !important; /* Hapus border */
     border-radius: 10px !important;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem; /* Sedikit lebih banyak margin antar item */
     overflow: hidden; /* Penting untuk border-radius */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px var(--dm-accordion-shadow-color); /* Shadow lebih cerah dan timbul */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Tambah transisi */
+}
+
+.accordion-item:hover {
+    transform: translateY(-5px); /* Efek timbul saat hover */
+    box-shadow: 0 12px 25px rgba(0, 123, 255, 0.6); /* Shadow lebih kuat saat hover */
 }
 
 .accordion-header {
@@ -578,20 +575,24 @@ body {
 }
 
 .accordion-button {
-    background-color: var(--dm-accordion-header-bg-collapsed) !important;
+    background-color: var(--dm-dark-gray) !important; /* Gunakan dm-dark-gray */
     color: var(--dm-accordion-button-color) !important;
     font-weight: 600;
     padding: 1rem 1.5rem !important;
-    border: none !important;
+    border: none !important; /* Hapus border pada button */
     border-radius: 10px !important; /* Tambahkan border radius */
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .accordion-button:not(.collapsed) {
-    background-color: var(--dm-accordion-header-bg-active) !important;
+    background-color: var(--dm-gradient-start) !important; /* Gunakan gradien saat aktif */
     color: var(--dm-white) !important;
-    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 2px 5px rgba(0, 123, 255, 0.2);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 2px 5px var(--dm-active-shadow-color);
 }
+.accordion-button:not(.collapsed):hover {
+    background-color: var(--dm-gradient-end) !important; /* Sedikit perbedaan gradien saat hover aktif */
+}
+
 
 .accordion-button:focus {
     outline: none !important;
@@ -604,10 +605,10 @@ body {
 }
 
 .accordion-body {
-    background-color: var(--dm-black) !important;
+    background-color: var(--dm-dark-gray) !important; /* Gunakan dm-dark-gray */
     color: var(--dm-light-gray) !important;
     padding: 1.5rem !important;
-    border-top: 1px solid var(--dm-accordion-border) !important;
+    border-top: none !important; /* Hapus border top */
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
@@ -657,6 +658,79 @@ body {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
+    /* Navbar dan Page Content Wrapper untuk mobile */
+    .navbar-custom {
+        top: 10px; /* Sedikit lebih rendah di mobile */
+        width: 90%; /* Ambil lebih banyak lebar */
+        margin: 10px auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .page-content-wrapper {
+        padding-top: 80px; /* Lebih sedikit padding di mobile untuk hero/main content */
+        flex-direction: column; /* Tumpuk sidebar di atas konten utama */
+    }
+
+    .page-content-wrapper.dashboard-layout {
+        flex-direction: column; /* Tumpuk sidebar di atas konten utama di dashboard */
+        padding-top: 0; /* Sidebar akan mengelola padding top-nya sendiri */
+    }
+
+    .sidebar {
+        width: 100% !important; /* Sidebar mengambil lebar penuh di mobile */
+        position: relative; /* Buat sidebar relatif */
+        height: auto; /* Tinggi disesuaikan dengan konten */
+        box-shadow: none;
+        border-radius: 0;
+        margin-bottom: 20px; /* Beri jarak ke konten di bawahnya */
+    }
+
+    .sidebar.collapsed {
+        width: 100% !important;
+    }
+
+    .sidebar .app-logo {
+        display: block; /* Selalu tampilkan logo di mobile */
+        text-align: center;
+        width: 100%;
+    }
+
+    .sidebar .sidebar-toggle-btn {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+
+    .sidebar-nav ul {
+        flex-direction: column; /* Tumpuk item navigasi */
+        padding: 0;
+    }
+
+    .sidebar-nav .nav-item {
+        margin: 0;
+        width: 100%;
+    }
+
+    .sidebar-nav .nav-link {
+        padding: 0.8rem 1rem !important;
+        justify-content: flex-start;
+        border-radius: 0; /* Hapus border radius di mobile sidebar */
+    }
+
+    .sidebar-nav .nav-link span {
+        display: inline-block !important; /* Selalu tampilkan teks di mobile sidebar */
+        margin-left: 10px;
+    }
+    .sidebar-nav .nav-link i {
+        min-width: 25px; /* Pastikan ikon tetap rapi */
+    }
+
+    .main-content-area {
+        margin-left: 0 !important; /* Hapus margin left di mobile */
+        width: 100%;
+    }
+
     .hero-section h1 {
         font-size: 3rem;
     }
@@ -713,15 +787,430 @@ body {
         font-size: 0.9rem;
     }
 
+    /* Toast notification for mobile */
+    #toast-notification-container {
+        top: 80px; /* Adjust position for mobile */
+        right: 10px;
+        left: 10px; /* Centered with a bit of margin */
+        width: auto;
+    }
+    .custom-toast-notification {
+        min-width: unset;
+        max-width: 95%; /* Adjust width for mobile */
+        margin: 0 auto; /* Center toast horizontally */
+    }
+}
+
+/* NEW: Sidebar Styling */
+.sidebar {
+    width: var(--dm-sidebar-width);
+    background-color: var(--dm-sidebar-bg);
+    padding: 20px;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.7);
+    transition: all 0.3s ease;
+    min-height: 100vh; /* Memastikan sidebar setinggi viewport */
+    display: flex;
+    flex-direction: column;
+    position: sticky; /* Tetap di viewport saat scroll */
+    top: 0; /* Tetapkan di bagian atas */
+    left: 0; /* Tetapkan di kiri */
+    z-index: 1020; /* Di bawah navbar utama */
+}
+
+.sidebar.collapsed {
+    width: var(--dm-sidebar-collapsed-width);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--dm-border-color);
+}
+
+.sidebar-header .app-logo {
+    color: var(--dm-white);
+    font-size: 1.8rem;
+    font-weight: 800;
+    white-space: nowrap; /* Cegah teks logo pecah */
+    overflow: hidden; /* Sembunyikan jika sidebar collap */
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .app-logo {
+    opacity: 0;
+    width: 0;
+}
+
+.sidebar-toggle-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--dm-light-gray);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+    color: var(--dm-accent-blue);
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav .nav-item {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    color: var(--dm-light-gray);
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar-nav .nav-link:hover {
+    background-color: var(--dm-nav-item-hover-bg);
+    color: var(--dm-white);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-nav .nav-link.active {
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    color: var(--dm-white);
+    box-shadow: 0 4px 15px var(--dm-active-shadow-color);
+}
+
+.sidebar-nav .nav-link i {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    min-width: 25px; /* Pastikan ikon tidak bergeser */
+    text-align: center;
+}
+
+.sidebar.collapsed .sidebar-nav .nav-link span {
+    display: none; /* Sembunyikan teks saat collapsed */
+}
+
+.sidebar.collapsed .sidebar-nav .nav-link {
+    justify-content: center; /* Pusatkan ikon saat collapsed */
+    padding: 12px 0; /* Sesuaikan padding */
+}
+
+.sidebar-footer {
+    margin-top: auto; /* Dorong footer ke bawah */
+    padding-top: 20px;
+    border-top: 1px solid var(--dm-border-color);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-footer {
+    opacity: 0;
+    height: 0; /* Sembunyikan footer saat collapsed */
+    padding-top: 0;
+    border-top: none;
+}
+
+.sidebar-footer p {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: var(--dm-light-gray);
+}
+.sidebar-footer .user-id {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* NEW: Dashboard Content Styling */
+.dashboard-content {
+    padding: 2rem;
+    background-color: var(--dm-dashboard-bg); /* Latar belakang konten dashboard */
+    border-radius: 15px;
+    min-height: calc(100vh - 100px); /* Sesuaikan tinggi agar tidak terlalu pendek */
+}
+
+.dashboard-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 3px 10px rgba(0, 123, 255, 0.2);
+}
+
+.dashboard-subtitle {
+    font-size: 1.3rem;
+    color: var(--dm-light-gray);
+    margin-bottom: 3rem;
+}
+
+.card-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem; /* Jarak antar kartu */
+    margin-bottom: 3rem;
+}
+
+.dashboard-info-card {
+    flex: 1; /* Agar kartu membesar mengisi ruang */
+    min-width: 280px; /* Minimal lebar kartu */
+    background-color: var(--dm-dark-gray) !important;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 15px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+}
+
+.dashboard-info-card .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dm-white);
+    margin-bottom: 0.75rem;
+}
+
+.dashboard-info-card .card-text {
+    font-size: 1.1rem;
+    color: var(--dm-light-gray);
+    margin-bottom: 1.5rem;
+}
+
+.section-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dm-white);
+    margin-bottom: 2rem;
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.todo-list-card {
+    background-color: var(--dm-black) !important;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px !important;
+    height: 100%; /* Penting untuk row-cols-x */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.todo-list-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+}
+
+.todo-list-card .card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--dm-white);
+}
+
+.todo-list-card .card-text {
+    font-size: 0.95rem;
+    color: var(--dm-light-gray);
+}
+
+/* Badges styling */
+.badge {
+    padding: 0.5em 0.8em;
+    border-radius: 5px;
+    font-weight: 600;
+}
+.badge.bg-primary {
+    background-color: var(--dm-accent-blue) !important;
+}
+.badge.bg-success {
+    background-color: #28a745 !important; /* Green */
+}
+.badge.bg-info {
+    background-color: var(--dm-accent-purple) !important;
+}
+
+/* Notifikasi Toast - Styling sudah ada dari sebelumnya, memastikan konsisten */
+#toast-notification-container {
+    position: fixed;
+    top: 20px; /* DIUBAH: Pindah ke atas agar tidak bentrok dengan sidebar di dashboard */
+    right: 20px;
+    z-index: 1050; 
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+    pointer-events: none; 
+}
+
+.custom-toast-notification {
+    background-color: var(--dm-dark-gray);
+    color: var(--dm-white);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    min-width: 250px;
+    max-width: 350px;
+    font-size: 1rem;
+    opacity: 0; 
+    transform: translateX(100%); 
+    animation: slideInFromRight 0.5s ease-out forwards, fadeOut 0.5s ease-out 2.5s forwards; 
+    pointer-events: all; 
+    display: flex; 
+    align-items: center;
+}
+
+.custom-toast-notification.success {
+    border-color: #008000;
+    box-shadow: 0 8px 20px rgba(0, 128, 0, 0.4);
+}
+.custom-toast-notification.error {
+    border-color: #8B0000; 
+    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.5); 
+}
+.custom-toast-notification.info {
+    border-color: #0056b3;
+    box-shadow: 0 8px 20px rgba(0, 56, 116, 0.4);
+}
+.custom-toast-notification.warning {
+    border-color: #8B4513;
+    box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    /* Navbar utama akan disembunyikan di mobile dashboard */
     .navbar-custom {
-        padding: 0.3rem 0.3rem;
-        margin: 10px auto;
+        display: none; 
     }
-    .navbar-nav .nav-item {
-        margin: 0 3px;
+
+    .page-content-wrapper.dashboard-layout {
+        flex-direction: column; /* Sidebar di atas konten utama di mobile */
     }
-    .navbar-custom .nav-link {
-        padding: 0.5rem 1rem !important;
-        font-size: 0.9rem;
+
+    .sidebar {
+        width: 100% !important; /* Sidebar mengambil lebar penuh di mobile */
+        position: relative; 
+        min-height: auto;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Shadow di bawah sidebar di mobile */
+        border-radius: 0 0 15px 15px; /* Sudut bawah membulat */
+        margin-bottom: 20px;
+    }
+
+    .sidebar.collapsed {
+        width: 100% !important;
+    }
+
+    .sidebar .sidebar-header {
+        justify-content: center; /* Pusatkan header di mobile */
+        padding: 15px;
+    }
+    .sidebar .app-logo {
+        opacity: 1; /* Selalu tampilkan logo di mobile sidebar */
+        width: auto;
+        font-size: 1.5rem;
+    }
+    .sidebar .sidebar-toggle-btn {
+        display: none; /* Tombol toggle bisa disembunyikan di mobile jika sidebar selalu terbuka */
+    }
+
+    .sidebar-nav ul {
+        flex-direction: column;
+    }
+
+    .sidebar-nav .nav-link span {
+        display: inline-block !important; /* Selalu tampilkan teks di mobile sidebar */
+        margin-left: 10px;
+    }
+
+    .sidebar.collapsed .sidebar-nav .nav-link span {
+        display: inline-block !important; /* Pastikan teks tetap terlihat di mobile collapsed */
+    }
+
+    .sidebar-footer {
+        opacity: 1; /* Selalu tampilkan footer di mobile */
+        height: auto;
+        padding-top: 15px;
+        border-top: 1px solid var(--dm-border-color);
+    }
+
+    .main-content-area {
+        margin-left: 0 !important; /* Pastikan tidak ada margin kiri di mobile */
+        min-height: auto; /* Biarkan tinggi menyesuaikan konten */
+    }
+
+    .dashboard-title {
+        font-size: 2.5rem;
+    }
+
+    .dashboard-subtitle {
+        font-size: 1rem;
+    }
+
+    .card-section {
+        flex-direction: column; /* Tumpuk kartu di mobile */
+        gap: 1.5rem;
+    }
+    .dashboard-info-card {
+        min-width: unset; /* Hapus min-width di mobile */
+    }
+
+    .section-heading {
+        font-size: 2rem;
+    }
+
+    .todo-list-card .card-title {
+        font-size: 1.1rem;
+    }
+    .todo-list-card .card-text {
+        font-size: 0.85rem;
+    }
+
+    /* Toast notification for mobile */
+    #toast-notification-container {
+        top: 20px; /* Kembali ke atas untuk mobile */
+        right: 10px;
+        left: 10px; 
+        width: auto;
+    }
+    .custom-toast-notification {
+        min-width: unset;
+        max-width: 95%; 
+        margin: 0 auto; 
+    }
+}
+
+/* NEW: Sidebar Toggle Button (for desktop) */
+.sidebar-toggle-btn {
+    display: none; /* Sembunyikan default, hanya tampil di desktop untuk toggle */
+}
+@media (min-width: 769px) {
+    .sidebar-toggle-btn {
+        display: block; /* Tampilkan di desktop */
+    }
+
+    /* Adjust main content area based on sidebar state */
+    .page-content-wrapper.dashboard-layout .main-content-area {
+        margin-left: var(--dm-sidebar-width); /* Default margin saat sidebar terbuka */
+    }
+
+    .page-content-wrapper.dashboard-layout.sidebar-collapsed .main-content-area {
+        margin-left: var(--dm-sidebar-collapsed-width); /* Margin saat sidebar ciut */
     }
 }

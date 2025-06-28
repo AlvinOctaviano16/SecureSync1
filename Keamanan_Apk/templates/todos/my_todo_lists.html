@@ -1,0 +1,37 @@
+    {# templates/todos/my_todo_lists.html #}
+    {% extends "shared/base.html" %}
+
+    {% block content %}
+    <div class="dashboard-content">
+        <h1 class="dashboard-title animate-fade-in-up">To-Do List Saya</h1>
+        <p class="dashboard-subtitle animate-fade-in-up delay-1">Semua daftar To-Do yang Anda miliki.</p>
+
+        <div class="dashboard-lists-section">
+            <a href="{{ url_for('main.create_todo') }}" class="btn btn-primary mb-4 animate-fade-in-up delay-2">
+                <i class="fas fa-plus"></i> Buat To-Do Baru
+            </a>
+
+            {% if owned_lists %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 animate-fade-in-up delay-3">
+                {% for todo_list in owned_lists %}
+                <div class="col">
+                    <div class="card todo-list-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ todo_list.name }}</h5>
+                            <p class="card-text">{{ todo_list.description | default('Tidak ada deskripsi', true) }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="badge bg-primary">{{ todo_list.tasks | length }} Tugas</span>
+                                <a href="{{ url_for('main.todo_detail', todo_id=todo_list.id) }}" class="btn btn-sm btn-outline-light">Detail <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-center py-4 animate-fade-in-up delay-3">Anda belum memiliki To-Do List. <a href="{{ url_for('main.create_todo') }}">Buat yang pertama!</a></p>
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
+    
