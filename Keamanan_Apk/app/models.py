@@ -1,12 +1,15 @@
 # app/models.py
-from app import db # Import db instance dari __init__.py
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
-from bcrypt import hashpw, gensalt # Diperlukan untuk User.set_password
-from cryptography.fernet import Fernet # Diperlukan untuk Task.set_description / get_description
-from flask import current_app # Untuk mengakses app.config['FERNET_KEY']
+from bcrypt import hashpw, gensalt, checkpw
+from cryptography.fernet import Fernet
+from flask import current_app
 
-# Model User
+# db tidak diinisialisasi di sini, akan diinisialisasi di __init__.py
+db = SQLAlchemy()
+
+# --- MODEL DATABASE (Definisi Tabel) ---
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -28,7 +31,6 @@ class User(db.Model, UserMixin):
     def check_password(self, password_text):
         return checkpw(password_text.encode('utf-8'), self.password.encode('utf-8'))
 
-# Model ToDoList
 class ToDoList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -42,7 +44,6 @@ class ToDoList(db.Model):
     def __repr__(self):
         return f"ToDoList('{self.name}', Owner:{self.owner_id})"
 
-# Model Task
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     todo_list_id = db.Column(db.Integer, db.ForeignKey('to_do_list.id'), nullable=False)
@@ -56,16 +57,18 @@ class Task(db.Model):
     def __repr__(self):
         return f"Task('{self.title}', Status:'{self.status}')"
 
-    # Metode untuk enkripsi deskripsi
     def set_description(self, description_text):
-        cipher_suite = Fernet(current_app.config['FERNET_KEY']) # Dapatkan cipher_suite dari current_app
+        cipher_suite = current_app.config.get('CIPHER_SUITE')
+        if not cipher_suite:
+            raise RuntimeError("Fernet cipher_suite not configured. Please set app.config['CIPHER_SUITE'].")
         self.description_encrypted = cipher_suite.encrypt(description_text.encode('utf-8'))
 
     def get_description(self):
-        cipher_suite = Fernet(current_app.config['FERNET_KEY']) # Dapatkan cipher_suite dari current_app
+        cipher_suite = current_app.config.get('CIPHER_SUITE')
+        if not cipher_suite:
+            raise RuntimeError("Fernet cipher_suite not configured. Please set app.config['CIPHER_SUITE'].")
         return cipher_suite.decrypt(self.description_encrypted).decode('utf-8')
 
-# Model ToDoListMember
 class ToDoListMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     todo_list_id = db.Column(db.Integer, db.ForeignKey('to_do_list.id'), nullable=False)
@@ -77,7 +80,6 @@ class ToDoListMember(db.Model):
     def __repr__(self):
         return f"ToDoListMember(User:{self.user_id} -> ToDoList:{self.todo_list_id}, Perm:'{self.permission_level}')"
 
-# Model ActivityLog
 class ActivityLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)

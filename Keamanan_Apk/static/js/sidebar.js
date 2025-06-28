@@ -1,8 +1,9 @@
-// static/sidebar.js
+// static/js/sidebar_nav.js
 
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('main-sidebar');
-    if (!sidebar) return; // Keluar jika elemen sidebar tidak ada di halaman ini
+    // Hanya jalankan logika ini jika elemen sidebar ada di halaman
+    if (!sidebar) return; 
 
     const sidebarToggleBtn = document.getElementById('sidebar-toggle');
     const sidebarNavLinks = sidebar.querySelectorAll('.sidebar-nav-link');
@@ -24,23 +25,23 @@ document.addEventListener('DOMContentLoaded', function() {
             link.style.color = '';
         });
 
-        if (targetLink) {
+        if (targetLink) { // Jika targetLink diberikan (dari klik/hover)
             linkToActivate = targetLink;
-        } else {
-            // Tentukan link aktif berdasarkan pathname saat ini
+        } else { // Jika tidak ada target, tentukan dari URL pathname
             const currentPathname = window.location.pathname;
             sidebarNavLinks.forEach(link => {
                 const linkHref = link.getAttribute('href').split('?')[0]; // Hapus query params
 
                 // Aktifkan link jika pathname saat ini mengandung href dari link sidebar
-                // Contoh: /dashboard cocok dengan /dashboard
-                // Handle khusus untuk link Home di sidebar jika dia menuju '/'
-                if (linkHref === url_for_js('home').split('?')[0] && (currentPathname === '/' || currentPathname === '/home')) {
-                    linkToActivate = link;
-                } else if (currentPathname.includes(linkHref) && linkHref !== url_for_js('home').split('?')[0]) {
+                // atau jika endpoint cocok
+                if (currentPathname.includes(linkHref) && linkHref !== '/') {
                     linkToActivate = link;
                 }
             });
+            // Fallback untuk dashboard jika tidak ada link lain yang cocok
+            if (!linkToActivate && currentPathname === url_for_js('dashboard')) {
+                linkToActivate = document.querySelector('.sidebar-nav-link[href*="/dashboard"]');
+            }
         }
 
         // Pindahkan indikator jika ada link aktif yang teridentifikasi
@@ -78,13 +79,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === Event Listeners Sidebar ===
     // Toggle sidebar saat tombol diklik
-    sidebarToggleBtn.addEventListener('click', function() {
-        isSidebarExpanded = !isSidebarExpanded;
-        sidebar.classList.toggle('expanded', isSidebarExpanded);
-        sidebar.classList.remove('hover-expanded'); // Hapus hover jika diklik
-        updateMainContentMargin();
-        updateSidebarActiveIndicator(null); // Recalculate indicator position after expand/collapse
-    });
+    if (sidebarToggleBtn) {
+        sidebarToggleBtn.addEventListener('click', function() {
+            isSidebarExpanded = !isSidebarExpanded;
+            sidebar.classList.toggle('expanded', isSidebarExpanded);
+            sidebar.classList.remove('hover-expanded'); // Hapus hover jika diklik
+            updateMainContentMargin();
+            updateSidebarActiveIndicator(null); // Recalculate indicator position after expand/collapse
+        });
+    }
 
     // Event listener untuk hover pada sidebar
     sidebar.addEventListener('mouseenter', function() {
@@ -105,17 +108,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle klik pada link sidebar
     sidebarNavLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            updateSidebarActiveIndicator(this); // Langsung update indicator saat link sidebar diklik
+        link.addEventListener('click', function(event) {
+            // Update indicator saat link sidebar diklik
+            setNavLinkActiveState(sidebarNavLinks, sidebarActiveIndicator, 'vertical', this);
             // Tidak perlu delay untuk navigasi halaman, biarkan browser menavigasi
         });
 
         // Handle hover untuk indikator sidebar
         link.addEventListener('mouseenter', function() {
-            updateSidebarActiveIndicator(this);
+            // Indikator bergerak saat hover hanya jika sidebar tidak dikunci expanded
+            if (!isSidebarExpanded) {
+                setNavLinkActiveState(sidebarNavLinks, sidebarActiveIndicator, 'vertical', this);
+            }
         });
         link.addEventListener('mouseleave', function() {
-            updateSidebarActiveIndicator(null); // Kembali ke aktif by URL
+            // Kembali ke aktif by URL saat mouse leave
+            if (!isSidebarExpanded) {
+                setNavLinkActiveState(sidebarNavLinks, sidebarActiveIndicator, 'vertical', null);
+            }
         });
     });
 
@@ -131,11 +141,9 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSidebarActiveIndicator(null);
     });
 
-    // Helper function (must be defined or globally available if not imported)
-    // This is a simplified version; in a real Flask app, you'd generate URLs via Jinja or a global JS object
+    // Helper function (placeholder untuk Flask url_for di JS)
+    // Ini harus sinkron dengan Flask routes.
     function url_for_js(endpoint) {
-        // This is a placeholder. In a real app, you'd pass a JS object with Flask URLs.
-        // For current setup, we assume it's like Flask's url_for for simplicity.
         if (endpoint === 'home') return '/';
         if (endpoint === 'dashboard') return '/dashboard';
         if (endpoint === 'admin_panel') return '/admin_panel';
@@ -144,7 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (endpoint === 'login') return '/login';
         if (endpoint === 'register') return '/register';
         if (endpoint === 'logout') return '/logout';
-        // Add more endpoints as needed for sidebar links
         return `/${endpoint}`; // Generic fallback
     }
 });

@@ -1,48 +1,55 @@
 # app/__init__.py
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from bcrypt import hashpw, gensalt # Tetap di sini untuk generate password admin
-from cryptography.fernet import Fernet # Tetap di sini untuk inisialisasi cipher_suite
-from config import Config # Import konfigurasi kita
-import os
-from datetime import datetime
+from cryptography.fernet import Fernet
+from .routes import main_bp
+from .models import db, User # Import User untuk user_loader
 
-db = SQLAlchemy()
+# db = SQLAlchemy() # Pindahkan ke models.py
 login_manager = LoginManager()
-cipher_suite = None # Akan diinisialisasi di create_app
 
-def create_app(config_class=Config):
-    app = Flask(__name__)
-    app.config.from_object(config_class)
+def create_app():
+    # Inisialisasi Flask aplikasi
+    app = Flask(__name__, instance_relative_config=True) # Tambahkan instance_relative_config
+    
+    # Konfigurasi aplikasi
+    app.config['SECRET_KEY'] = os.urandom(24) # Gunakan kunci acak yang lebih aman
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+    # Konfigurasi kunci enkripsi Fernet
+    # Pastikan kunci ini tetap sama untuk dekripsi data!
+    app.config['FERNET_KEY'] = b't7tqK5Ba9xS6eQHgN6GLpF94cYlgdAKxY-tAVmO14y0='
+    app.config['CIPHER_SUITE'] = Fernet(app.config['FERNET_KEY'])
+
+    # Inisialisasi ekstensi dengan aplikasi
     db.init_app(app)
     login_manager.init_app(app)
-    login_manager.login_view = 'login' # Endpoint login kita sekarang
-
-    # Inisialisasi cipher_suite setelah app config diload
-    global cipher_suite
-    cipher_suite = Fernet(app.config['FERNET_KEY'])
-
-    # Import dan register blueprints
-    from app.routes import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-
-    # User Loader untuk Flask-Login
-    from app.models import User # Import model User dari models.py
+    login_manager.login_view = 'main.login_register' # Tentukan rute login
+    
+    # User loader untuk Flask-Login
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        with app.app_context():
+            # Pastikan User diimpor dari .models
+            return User.query.get(int(user_id))
 
-    # Fungsi untuk membuat tabel database dan user admin default
+    # Daftarkan Blueprint di sini
+    app.register_blueprint(main_bp)
+
+    return app
+
+# Fungsi untuk membuat tabel (dipanggil dari run.py)
+def create_tables_and_admin(app):
     with app.app_context():
         db.create_all()
-        # Buat user admin default jika belum ada
+        # Membuat user admin default jika belum ada
         if not User.query.filter_by(username='admin').first():
             admin_user = User(username='admin', role='admin')
-            admin_user.set_password('adminpassword') # GANTI PASSWORD INI DI LINGKUNGAN PRODUKSI!
+            # set_password dari model akan menggunakan bcrypt
+            admin_user.set_password('adminpassword') 
             db.session.add(admin_user)
             db.session.commit()
             print("Default admin user created: username='admin', password='adminpassword'")
-
-    return app
