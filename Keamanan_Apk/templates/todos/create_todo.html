@@ -1,40 +1,25 @@
-{# templates/todos/dashboard.html #}
-{% extends "base.html" %}
-{% block content %}
-    <div class="container"> {# Kontainer untuk konten Dashboard #}
-        <h2 class="card-title">Dashboard {{ current_user.username }}</h2> {# Gunakan card-title #}
-        <hr>
-        <h3 class="card-title">To-Do List Milik Saya <a href="{{ url_for('main.create_todo') }}" class="btn btn-primary btn-sm ms-3">Buat Baru</a></h3>
-        {% if owned_lists %}
-            <ul class="list-group mb-4">
-                {% for todo_list in owned_lists %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{ url_for('main.todo_detail', todo_id=todo_list.id) }}">{{ todo_list.name }}</a>
-                        <div>
-                            <a href="{{ url_for('main.share_todo', todo_id=todo_list.id) }}" class="btn btn-info btn-sm me-2">Share</a>
-                            <form action="{{ url_for('main.delete_todo', todo_id=todo_list.id) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus To-Do List ini dan semua tugasnya?');">Hapus</button>
-                            </form>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="card-text">Anda belum memiliki To-Do List. <a href="{{ url_for('main.create_todo') }}" class="text-primary fw-bold text-decoration-none">Buat yang pertama!</a></p>
-        {% endif %}
+{# templates/todos/create_todo.html #}
+{% extends "shared/base.html" %} {# DIKOREKSI: Path ke base.html #}
 
-        <h3 class="card-title mt-5">To-Do List yang Dibagikan kepada Saya</h3> {# Gunakan card-title #}
-        {% if shared_lists %}
-            <ul class="list-group">
-                {% for todo_list in shared_lists %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{ url_for('main.todo_detail', todo_id=todo_list.id) }}">{{ todo_list.name }}</a>
-                        <span class="badge bg-secondary">{{ todo_list.owner.username }} (Owner)</span>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="card-text">Belum ada To-Do List yang dibagikan kepada Anda.</p>
-        {% endif %}
-    </div> {# Tutup container #}
+{% block content %}
+<div class="dashboard-content">
+    <h1 class="dashboard-title animate-fade-in-up">Buat To-Do List Baru</h1>
+    <p class="dashboard-subtitle animate-fade-in-up delay-1">Isi detail di bawah ini untuk membuat daftar tugas baru Anda.</p>
+
+    <div class="card dashboard-info-card animate-fade-in-up delay-2">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('main.create_todo') }}">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nama To-Do List</label>
+                    <input type="text" class="form-control" id="name" name="name" required placeholder="Contoh: Belanja Bulanan">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Deskripsi (Opsional)</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Tambahkan detail atau catatan untuk daftar ini."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Buat To-Do List</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

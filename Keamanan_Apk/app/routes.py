@@ -1,57 +1,63 @@
-# app/routes.py
 from flask import render_template, redirect, url_for, request, flash, Blueprint
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import db, User, ToDoList, ToDoListMember, Task, ActivityLog
+# Impor db dari app (objek global)
+from app import db 
+# Impor model spesifik dari .models
+from .models import User, ToDoList, ToDoListMember, Task, ActivityLog
 from datetime import datetime
-import os # Import os untuk password acak
+import os
 
-# Buat Blueprint untuk rute utama.
-# template_folder='../templates' akan membuat Jinja2 mencari di folder `templates` di root proyek.
 main_bp = Blueprint('main', __name__, template_folder='../templates')
 
-# --- ROUTES (Fungsionalitas Aplikasi) ---
-
-# Halaman Beranda
 @main_bp.route("/")
 @main_bp.route("/home")
 def home():
-    # Render template home.html dari folder pages
     return render_template('pages/home.html')
 
-# Rute untuk menampilkan form Login/Register (metode GET)
 @main_bp.route("/login_register", methods=['GET'])
 def login_register():
     if current_user.is_authenticated:
         return redirect(url_for('main.dashboard'))
-    
-    # Render template gabungan dari folder auth
     return render_template('auth/login_register.html')
 
-# Rute untuk memproses Login (metode POST)
 @main_bp.route("/process_login", methods=['POST'])
 def process_login():
+    print("DEBUG: Fungsi process_login diakses.") # DEBUG 1
     if current_user.is_authenticated:
+        print("DEBUG: User sudah terautentikasi, redirect ke dashboard.") # DEBUG 2
         return redirect(url_for('main.dashboard'))
     
     username = request.form.get('username')
     password = request.form.get('password')
+    print(f"DEBUG: Menerima username: '{username}', password (sebagian): '{password[:3]}...'") # DEBUG 3
+
     user = User.query.filter_by(username=username).first()
     
-    if user and user.check_password(password):
-        login_user(user)
-        log = ActivityLog(user_id=user.id, action='user_logged_in', details=f"Pengguna '{username}' login.")
-        db.session.add(log)
-        db.session.commit()
-        flash(f'Selamat datang, {user.username}! Login berhasil.', 'success')
-        return redirect(url_for('main.dashboard'))
+    if user:
+        print(f"DEBUG: User '{username}' ditemukan di database.") # DEBUG 4
+        if user.check_password(password):
+            print("DEBUG: Password cocok. Melakukan login user.") # DEBUG 5
+            login_user(user)
+            log = ActivityLog(user_id=user.id, action='user_logged_in', details=f"Pengguna '{username}' login.")
+            db.session.add(log)
+            db.session.commit()
+            flash(f'Selamat datang, {user.username}! Login berhasil.', 'success')
+            print("DEBUG: Flash message sukses dan redirect ke dashboard.") # DEBUG 6
+            return redirect(url_for('main.dashboard'))
+        else:
+            print("DEBUG: Password tidak cocok.") # DEBUG 7
+            flash('Login gagal. Periksa username dan password.', 'danger')
+            return redirect(url_for('main.login_register', form='login'))
     else:
+        print(f"DEBUG: User '{username}' tidak ditemukan.") # DEBUG 8
         flash('Login gagal. Periksa username dan password.', 'danger')
-        return redirect(url_for('main.login_register', form='login')) # Redirect kembali ke form login
+        return redirect(url_for('main.login_register', form='login'))
 
-# Rute untuk memproses Registrasi (metode POST)
 @main_bp.route("/process_register", methods=['POST'])
 def process_register():
+    print("DEBUG: Fungsi process_register diakses.") # DEBUG 1
     if current_user.is_authenticated:
+        print("DEBUG: User sudah terautentikasi, redirect ke dashboard (register).") # DEBUG 2
         return redirect(url_for('main.dashboard'))
         
     username = request.form.get('username')
@@ -59,12 +65,15 @@ def process_register():
     confirm_password = request.form.get('confirm_password')
     
     if not username or not password or not confirm_password:
+        print("DEBUG: Ada kolom kosong saat register.") # DEBUG 3
         flash('Semua kolom wajib diisi!', 'danger')
     elif password != confirm_password:
+        print("DEBUG: Konfirmasi password tidak cocok (register).") # DEBUG 4
         flash('Konfirmasi password tidak cocok!', 'danger')
     else:
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
+            print(f"DEBUG: Username '{username}' sudah ada (register).") # DEBUG 5
             flash('Username sudah ada. Silakan pilih yang lain.', 'danger')
         else:
             user = User(username=username)
@@ -75,12 +84,10 @@ def process_register():
             db.session.add(log)
             db.session.commit()
             flash('Akun Anda telah dibuat! Silakan login.', 'success')
-            return redirect(url_for('main.login_register', form='login')) # Redirect ke login form setelah sukses
-    
-    return redirect(url_for('main.login_register', form='register')) # Redirect kembali ke halaman register jika ada error
-
-# ... (lanjutan rute lainnya yang sudah benar dari kode sebelumnya) ...
-# Cukup tambahkan 'main.' di depan setiap url_for() yang merujuk ke rute di Blueprint ini
+            print(f"DEBUG: User '{username}' berhasil didaftarkan. Redirect ke login.") # DEBUG 6
+            return redirect(url_for('main.login_register', form='login'))
+        
+    return redirect(url_for('main.login_register', form='register'))
 
 @main_bp.route("/logout")
 @login_required
@@ -99,17 +106,29 @@ def dashboard():
     shared_memberships = ToDoListMember.query.filter_by(user_id=current_user.id).all()
     shared_lists = [membership.todo_list for membership in shared_memberships if membership.todo_list]
     shared_lists = [lst for lst in shared_lists if lst.owner_id != current_user.id]
-    return render_template('pages/dashboard.html', owned_lists=owned_lists, shared_lists=shared_lists, current_user=current_user)
+    return render_template('pages/dashboard.html', user_todo_lists=owned_lists, shared_todo_lists=shared_lists, current_user=current_user)
 
 @main_bp.route("/services")
-@login_required
 def services():
     return render_template('pages/services.html', title='Layanan')
 
 @main_bp.route("/about")
-@login_required
 def about():
     return render_template('pages/about.html', title='Tentang Kami')
+
+@main_bp.route("/my_todo_lists")
+@login_required
+def my_todo_lists():
+    owned_lists = ToDoList.query.filter_by(owner_id=current_user.id).order_by(ToDoList.created_at.desc()).all()
+    return render_template('todos/my_todo_lists.html', owned_lists=owned_lists)
+
+@main_bp.route("/shared_todo_lists")
+@login_required
+def shared_todo_lists():
+    shared_memberships = ToDoListMember.query.filter_by(user_id=current_user.id).all()
+    shared_lists = [membership.todo_list for membership in shared_memberships if membership.todo_list]
+    shared_lists = [lst for lst in shared_lists if lst.owner_id != current_user.id]
+    return render_template('todos/shared_todo_lists.html', shared_lists=shared_lists)
 
 @main_bp.route("/create_todo", methods=['GET', 'POST'])
 @login_required
@@ -151,7 +170,7 @@ def todo_detail(todo_id):
 def add_task(todo_id):
     todo_list = ToDoList.query.get_or_404(todo_id)
     is_owner = (todo_list.owner_id == current_user.id)
-    is_write_member = ToDoListMember.query.filter_by(todo_list_id=todo_id, user_id=current_user.id, permission_level='write').first()
+    is_write_member = ToDoListMember.query.filter_by(todo_list_id=todo_list.id, user_id=current_user.id, permission_level='write').first()
     if not is_owner and not is_write_member:
         flash('Anda tidak memiliki izin untuk menambah tugas ke To-Do List ini.', 'danger')
         return redirect(url_for('main.todo_detail', todo_id=todo_list.id))
@@ -252,7 +271,7 @@ def share_todo(todo_id):
                 else:
                     flash(f'Pengguna "{username_to_share}" sudah menjadi anggota To-Do List ini dengan izin yang sama.', 'warning')
             else:
-                new_member = ToDoListMember(todo_list=todo_list, user=user_to_share, permission_level=permission_level)
+                new_member = ToDoListMember(todo_list=todo_list, user_id=user_to_share.id, permission_level=permission_level)
                 db.session.add(new_member)
                 db.session.commit()
                 log = ActivityLog(user_id=current_user.id, action='share_todo', details=f"Membagi To-Do List '{todo_list.name}' dengan '{user_to_share.username}' (Izin: {permission_level}).")
@@ -262,6 +281,28 @@ def share_todo(todo_id):
                 return redirect(url_for('main.share_todo', todo_id=todo_id))
     current_members = ToDoListMember.query.filter_by(todo_list_id=todo_id).all()
     return render_template('todos/share_todo.html', todo_list=todo_list, current_members=current_members)
+
+@main_bp.route("/todo_member/<int:todo_member_id>/remove", methods=['POST'])
+@login_required
+def remove_member(todo_member_id):
+    member_to_remove = ToDoListMember.query.get_or_404(todo_member_id)
+    
+    # Pastikan current_user adalah owner dari ToDoList ini
+    if member_to_remove.todo_list.owner_id != current_user.id:
+        flash('Anda tidak memiliki izin untuk menghapus anggota ini.', 'danger')
+        return redirect(url_for('main.dashboard'))
+    
+    todo_list_id = member_to_remove.todo_list.id
+    db.session.delete(member_to_remove)
+    db.session.commit()
+    
+    log = ActivityLog(user_id=current_user.id, action='remove_member', details=f"Menghapus '{member_to_remove.user.username}' dari To-Do List '{member_to_remove.todo_list.name}'.")
+    db.session.add(log)
+    db.session.commit()
+    
+    flash(f"Anggota '{member_to_remove.user.username}' berhasil dihapus dari To-Do List.", 'success')
+    return redirect(url_for('main.share_todo', todo_id=todo_list_id))
+
 
 @main_bp.route("/admin_panel", methods=['GET', 'POST'])
 @login_required
