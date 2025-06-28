@@ -101,6 +101,16 @@ def dashboard():
     shared_lists = [lst for lst in shared_lists if lst.owner_id != current_user.id]
     return render_template('pages/dashboard.html', owned_lists=owned_lists, shared_lists=shared_lists, current_user=current_user)
 
+@main_bp.route("/services")
+@login_required
+def services():
+    return render_template('pages/services.html', title='Layanan')
+
+@main_bp.route("/about")
+@login_required
+def about():
+    return render_template('pages/about.html', title='Tentang Kami')
+
 @main_bp.route("/create_todo", methods=['GET', 'POST'])
 @login_required
 def create_todo():
