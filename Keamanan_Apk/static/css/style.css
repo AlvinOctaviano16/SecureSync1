@@ -34,7 +34,7 @@ body {
     
     /* Latar belakang global untuk body, akan terlihat di belakang navbar */
     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), /* Overlay gelap */
-                      url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD09IjAgMCAxMjAwIDYwMCI+CiAgICA8ZGVmcz4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWTDPSJncml2aXR5R215Z3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjNjE2QkY0IiBvZmZzZXQ9IjUwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIxMDAlIi8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDwvZGVmcz4KICAgIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwNTA1MDUiLz4KICAgIDxwYXRoIGQ9Ik0wIDBMMjAwIDYwMEwxMDAwIDYwMEwxMjAwIDBaTTQwMCAwTDYwMCA2MDBMODAwIDYwMEwxMDAwIDBaIiBmaWxsPSJ1cmwoI2dtaUdyYWRpZW50KSIgZmlsbC1vcGFjaXR5PSIwLjE1Ii8+CiAgICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI0MDAiIHI9IjE1MCIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CiAgICA8Y2lyY2xlIGN4PSIxMDAwIiBjeT0iMTUwIiByPSIxMDAiIGZpbGw9InVybCgjZ21pR3JhZGlldCkiIGZpbGwtb3BhY2l0eT0iMC4yNSIvPgogICAgPHBhdGggZD0iTTUwMCA1MExyODAgNTBMMjgwMCAwWiIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==');
+                      url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD09IjAgMCAxMjAwIDYwMCI+CiAgICA8ZGVmcz4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWTDPSJncml2aXR5R215Z3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjNjE2QkY0IiBvZmZzZXQ9IjUwJSIvPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjUzQkZENiIgb2Zmc2V0PSIxMDAlIi8+CiAgICAgICAgPC9kZWZzPgogICAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzA1MDUwNSIvPgogICAgPHBhdGggZD0iTTAgBDBMMjAwIDYwMEwxMDAwIDYwMEwxMjAwIDBaTTQwMCAwTDYwMCA2MDBMODAwIDYwMEwxMDAwIDBaIiBmaWxsPSJ1cmwoI2dtaUdyYWRpZW50KSIgZmlsbC1vcGFjaXR5PSIwLjE1Ii8+CiAgICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI0MDAiIHI9IjE1MCIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CiAgICA8Y2lyY2xlIGN4PSIxMDAwIiBjeT0iMTUwIiByPSIxMDAiIGZpbGw9InVybCgjZ21pR3JhZGlldCkiIGZpbGwtb3BhY2l0eT0iMC4yNSIvPgogICAgPHBhdGggZD0iTTUwMCA1MExyODAgNTBMMjgwMCAwWiIgZmlsbD0idXJsKCNnbWlHcmFkaWVudCkiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==');
     background-size: cover;
     background-attachment: fixed; /* Membuat background tetap saat scroll */
     background-position: center center;
@@ -133,16 +133,29 @@ body {
 }
 
 /* Wrapper untuk konten utama (agar terpusat) */
-.content-wrapper {
+.page-content-wrapper {
     flex-grow: 1;
-    width: 100%;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1.5rem;
+    width: 100%; /* Pastikan wrapper mengambil lebar penuh */
+    max-width: 100%; /* Hapus max-width agar tidak ada pinggir kosong */
+    margin-left: 0; /* Hapus margin auto */
+    margin-right: 0; /* Hapus margin auto */
+    padding: 0; /* Hapus padding agar konten bisa full-width */
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.main-content-area {
+    width: 100%; /* Main content area juga harus full width */
+    max-width: 100%; /* Hapus max-width */
+}
+
+.main-content-container {
+    width: 100%;
+    max-width: 1200px; /* Batasi lebar konten di dalam container ini */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem; /* Tambahkan padding di sini untuk konten */
 }
 
 /* Kustomisasi alert Bootstrap untuk tema gelap */
