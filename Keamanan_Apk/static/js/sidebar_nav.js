@@ -1,19 +1,30 @@
 // static/js/sidebar_nav.js
 
 document.addEventListener('DOMContentLoaded', function() {
-    const sidebar = document.getElementById('main-sidebar');
+    // #1: Mengambil elemen sidebar dengan ID yang benar dari HTML
+    const sidebar = document.getElementById('sidebar');
     // Hanya jalankan logika ini jika elemen sidebar ada di halaman
     if (!sidebar) return; 
 
     const sidebarToggleBtn = document.getElementById('sidebar-toggle');
-    const sidebarNavLinks = sidebar.querySelectorAll('.sidebar-nav-link');
+    // #2: Mengambil semua link dengan kelas yang benar
+    const sidebarNavLinks = sidebar.querySelectorAll('.nav-link');
+    // #3: Mengambil indikator yang sudah ditambahkan di HTML
     const sidebarActiveIndicator = document.getElementById('sidebar-active-indicator');
     
-    let isSidebarExpanded = false; // Status sidebar: true = meluas, false = menyusut
+    // #6: Status awal sidebar adalah meluas (expanded) sesuai dengan CSS default-nya.
+    let isSidebarExpanded = true;
 
     // --- Fungsi untuk Menggerakkan Indikator Aktif pada Sidebar ---
     function updateSidebarActiveIndicator(targetLink = null) {
+        // #3: Tambahkan pengecekan null untuk indikator untuk menghindari error jika elemen tidak ditemukan.
+        if (!sidebarActiveIndicator) {
+            console.warn('Sidebar active indicator element not found.');
+            return; 
+        }
+
         let linkToActivate = null;
+        let foundMatch = false;
 
         // Reset semua gaya inline dari link sidebar
         sidebarNavLinks.forEach(link => {
@@ -29,18 +40,36 @@ document.addEventListener('DOMContentLoaded', function() {
             linkToActivate = targetLink;
         } else { // Jika tidak ada target, tentukan dari URL pathname
             const currentPathname = window.location.pathname;
-            sidebarNavLinks.forEach(link => {
-                const linkHref = link.getAttribute('href').split('?')[0]; // Hapus query params
 
-                // Aktifkan link jika pathname saat ini mengandung href dari link sidebar
-                // atau jika endpoint cocok
-                if (currentPathname.includes(linkHref) && linkHref !== '/') {
-                    linkToActivate = link;
-                }
-            });
+            // #8: LOGIKA BARU untuk halaman detail dan dinamis
+            // Jika pathname dimulai dengan /todo/detail, aktifkan link "To-Do List Saya"
+            if (currentPathname.startsWith('/todo/detail/')) {
+                linkToActivate = document.querySelector('.nav-link[href*="/my_todo_lists"]');
+                foundMatch = true;
+            } 
+            // Jika pathname dimulai dengan /share, aktifkan link "Dibagikan ke Saya"
+            else if (currentPathname.startsWith('/share/')) {
+                linkToActivate = document.querySelector('.nav-link[href*="/shared_todo_lists"]');
+                foundMatch = true;
+            }
+            // Jika pathname dimulai dengan /admin/reset, aktifkan link "Admin Panel"
+            else if (currentPathname.startsWith('/admin/reset')) {
+                linkToActivate = document.querySelector('.nav-link[href*="/admin_panel"]');
+                foundMatch = true;
+            }
+            // #2: LOGIKA LAMA untuk halaman statis
+            if (!foundMatch) {
+                sidebarNavLinks.forEach(link => {
+                    const linkHref = link.getAttribute('href').split('?')[0];
+                    if (currentPathname.includes(linkHref) && linkHref !== '/') {
+                        linkToActivate = link;
+                    }
+                });
+            }
+
             // Fallback untuk dashboard jika tidak ada link lain yang cocok
             if (!linkToActivate && currentPathname === url_for_js('dashboard')) {
-                linkToActivate = document.querySelector('.sidebar-nav-link[href*="/dashboard"]');
+                linkToActivate = document.querySelector('.nav-link[href*="/dashboard"]');
             }
         }
 
@@ -82,8 +111,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sidebarToggleBtn) {
         sidebarToggleBtn.addEventListener('click', function() {
             isSidebarExpanded = !isSidebarExpanded;
-            sidebar.classList.toggle('expanded', isSidebarExpanded);
-            sidebar.classList.remove('hover-expanded'); // Hapus hover jika diklik
+            // #7: Ganti 'expanded' menjadi 'collapsed' untuk menyesuaikan dengan CSS, dan balikkan logikanya
+            sidebar.classList.toggle('collapsed', !isSidebarExpanded);
+            sidebar.classList.remove('hover-expanded'); // Hapus kelas hover
             updateMainContentMargin();
             updateSidebarActiveIndicator(null); // Recalculate indicator position after expand/collapse
         });
@@ -109,22 +139,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle klik pada link sidebar
     sidebarNavLinks.forEach(link => {
         link.addEventListener('click', function(event) {
-            // Update indicator saat link sidebar diklik
-            setNavLinkActiveState(sidebarNavLinks, sidebarActiveIndicator, 'vertical', this);
-            // Tidak perlu delay untuk navigasi halaman, biarkan browser menavigasi
+            // #4: Ganti panggilan fungsi yang hilang (setNavLinkActiveState) dengan fungsi yang ada
+            updateSidebarActiveIndicator(this);
         });
 
         // Handle hover untuk indikator sidebar
         link.addEventListener('mouseenter', function() {
             // Indikator bergerak saat hover hanya jika sidebar tidak dikunci expanded
             if (!isSidebarExpanded) {
-                setNavLinkActiveState(sidebarNavLinks, sidebarActiveIndicator, 'vertical', this);
+                // #4: Ganti panggilan fungsi yang hilang dengan fungsi yang ada
+                updateSidebarActiveIndicator(this);
             }
         });
         link.addEventListener('mouseleave', function() {
             // Kembali ke aktif by URL saat mouse leave
             if (!isSidebarExpanded) {
-                setNavLinkActiveState(sidebarNavLinks, sidebarActiveIndicator, 'vertical', null);
+                // #4: Ganti panggilan fungsi yang hilang dengan fungsi yang ada
+                updateSidebarActiveIndicator(null);
             }
         });
     });
@@ -142,16 +173,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Helper function (placeholder untuk Flask url_for di JS)
-    // Ini harus sinkron dengan Flask routes.
+    // #9: Hapus endpoint home, dashboard, services, dan about
     function url_for_js(endpoint) {
-        if (endpoint === 'home') return '/';
-        if (endpoint === 'dashboard') return '/dashboard';
         if (endpoint === 'admin_panel') return '/admin_panel';
-        if (endpoint === 'services') return '/services';
-        if (endpoint === 'about') return '/about';
         if (endpoint === 'login') return '/login';
         if (endpoint === 'register') return '/register';
         if (endpoint === 'logout') return '/logout';
+        // Tambahkan endpoint lain jika diperlukan
+        if (endpoint === 'my_todo_lists') return '/my_todo_lists';
+        if (endpoint === 'shared_todo_lists') return '/shared_todo_lists';
+        if (endpoint === 'create_todo') return '/create_todo';
         return `/${endpoint}`; // Generic fallback
     }
 });

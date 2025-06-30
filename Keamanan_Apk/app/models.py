@@ -10,20 +10,17 @@ from flask import current_app
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    # DIKOREKSI: Mengubah nama kolom dari 'password_hash' menjadi 'password'
     password = db.Column(db.String(128), nullable=False) 
     role = db.Column(db.String(50), default='user') 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     owned_todo_lists = db.relationship('ToDoList', backref='owner', lazy='dynamic', cascade="all, delete-orphan")
-    memberships = db.relationship('ToDoListMember', back_populates='user_obj', lazy='dynamic', cascade="all, delete-orphan")
+    memberships = db.relationship('ToDoListMember', back_populates='user', lazy='dynamic', cascade="all, delete-orphan")
 
-    def set_password(self, password_text): # Menggunakan password_text sebagai nama parameter untuk kejelasan
-        # DIKOREKSI: Menggunakan self.password (nama kolom baru)
+    def set_password(self, password_text):
         self.password = generate_password_hash(password_text)
 
-    def check_password(self, password_text): # Menggunakan password_text untuk kejelasan
-        # DIKOREKSI: Menggunakan self.password (nama kolom baru)
+    def check_password(self, password_text):
         return check_password_hash(self.password, password_text)
     
     def __repr__(self):
@@ -37,7 +34,7 @@ class ToDoList(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     tasks = db.relationship('Task', backref='todo_list', lazy='dynamic', cascade="all, delete-orphan")
-    members = db.relationship('ToDoListMember', back_populates='todo_list_obj', lazy='dynamic', cascade="all, delete-orphan")
+    members = db.relationship('ToDoListMember', back_populates='todo_list', lazy='dynamic', cascade="all, delete-orphan")
 
     def __repr__(self):
         return f'<ToDoList {self.name}>'
@@ -49,8 +46,10 @@ class ToDoListMember(db.Model):
     permission_level = db.Column(db.String(50), default='read') 
     joined_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user_obj = db.relationship('User', back_populates='memberships') 
-    todo_list_obj = db.relationship('ToDoList', back_populates='members')
+    # DIKOREKSI: Mengubah nama relasi dari 'user_obj' menjadi 'user'
+    user = db.relationship('User', back_populates='memberships') 
+    # DIKOREKSI: Mengubah nama relasi dari 'todo_list_obj' menjadi 'todo_list'
+    todo_list = db.relationship('ToDoList', back_populates='members')
 
     __table_args__ = (db.UniqueConstraint('todo_list_id', 'user_id', name='_todo_list_user_uc'),)
 
