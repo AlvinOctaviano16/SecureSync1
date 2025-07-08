@@ -271,7 +271,8 @@ def share_todo(todo_id):
                 else:
                     flash(f'Pengguna "{username_to_share}" sudah menjadi anggota To-Do List ini dengan izin yang sama.', 'warning')
             else:
-                new_member = ToDoListMember(todo_list=todo_list, user_id=user_to_share.id, permission_level=permission_level)
+               # routes.py: ganti baris 274 dengan ini
+                new_member = ToDoListMember(todo_list_id=todo_list.id, user_id=user_to_share.id, permission_level=permission_level)
                 db.session.add(new_member)
                 db.session.commit()
                 log = ActivityLog(user_id=current_user.id, action='share_todo', details=f"Membagi To-Do List '{todo_list.name}' dengan '{user_to_share.username}' (Izin: {permission_level}).")
@@ -287,21 +288,30 @@ def share_todo(todo_id):
 def remove_member(todo_member_id):
     member_to_remove = ToDoListMember.query.get_or_404(todo_member_id)
     
-    # Pastikan current_user adalah owner dari ToDoList ini
-    if member_to_remove.todo_list.owner_id != current_user.id:
+    # Gunakan relationship 'todo_list_obj' yang Anda definisikan di model
+    todo_list = member_to_remove.todo_list_obj
+    if todo_list.owner_id != current_user.id:
         flash('Anda tidak memiliki izin untuk menghapus anggota ini.', 'danger')
         return redirect(url_for('main.dashboard'))
     
-    todo_list_id = member_to_remove.todo_list.id
+    # Simpan informasi yang dibutuhkan SEBELUM menghapus objek
+    todo_list_id_for_redirect = todo_list.id
+    removed_username = member_to_remove.user_obj.username
+    todo_list_name = todo_list.name
+
+    # Hapus dari DB
     db.session.delete(member_to_remove)
-    db.session.commit()
     
-    log = ActivityLog(user_id=current_user.id, action='remove_member', details=f"Menghapus '{member_to_remove.user.username}' dari To-Do List '{member_to_remove.todo_list.name}'.")
+    # Buat log
+    log = ActivityLog(user_id=current_user.id, action='remove_member', 
+                      details=f"Menghapus '{removed_username}' dari To-Do List '{todo_list_name}'.")
     db.session.add(log)
+    
+    # Commit semua perubahan (delete dan add log) sekaligus
     db.session.commit()
     
-    flash(f"Anggota '{member_to_remove.user.username}' berhasil dihapus dari To-Do List.", 'success')
-    return redirect(url_for('main.share_todo', todo_id=todo_list_id))
+    flash(f"Anggota '{removed_username}' berhasil dihapus dari To-Do List.", 'success')
+    return redirect(url_for('main.share_todo', todo_id=todo_list_id_for_redirect))
 
 
 @main_bp.route("/admin_panel", methods=['GET', 'POST'])

@@ -46,7 +46,7 @@
                         <tbody>
                             {% for member in current_members %}
                             <tr>
-                                <td>{{ member.user.username }}</td>
+                                <td>{{ member.user_obj.username }}</td>
                                 <td>
                                     <span class="badge bg-{{ 'primary' if member.permission_level == 'write' else 'secondary' }}">
                                         {{ member.permission_level | capitalize }}
@@ -54,7 +54,7 @@
                                 </td>
                                 {% if todo_list.owner_id == current_user.id %}
                                 <td>
-                                    {% if member.user.id != todo_list.owner_id %} {# Owner tidak bisa menghapus dirinya sendiri #}
+                                    {% if member.user_obj.id != todo_list.owner_id %} {# Owner tidak bisa menghapus dirinya sendiri #}
                                     <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmRemoveMemberModal-{{ member.id }}">Hapus</button>
 
                                     {# Modal Konfirmasi Hapus Anggota #}
@@ -66,7 +66,7 @@
                                                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body custom-modal-body">
-                                                    <p>Apakah Anda yakin ingin menghapus <strong>{{ member.user.username }}</strong> dari To-Do List ini?</p>
+                                                    <p>Apakah Anda yakin ingin menghapus <strong>{{ member.user_obj.username }}</strong> dari To-Do List ini?</p>
                                                 </div>
                                                 <div class="modal-footer custom-modal-footer">
                                                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Batal</button>
