@@ -75,7 +75,7 @@ body {
 
 /* Sembunyikan brand text/logo */
 .navbar-custom .navbar-brand {
-    display: none; 
+    display: none;
 }
 
 .navbar-nav {
@@ -88,10 +88,10 @@ body {
 
 .navbar-nav .nav-link.hover-outline {
 
-  outline: 2px solid rgba(192, 199, 212, 0.6); 
-  outline-offset: 0px; 
-  border-radius: 48px; 
-  transition: none; 
+  outline: 2px solid rgba(192, 199, 212, 0.6);
+  outline-offset: 0px;
+  border-radius: 48px;
+  transition: none;
 }
 
 /* GAYA BARU UNTUK SLIDER */
@@ -177,9 +177,10 @@ body {
     transition: margin-left 0.3s ease; /* Transisi saat sidebar toggle */
 }
 
+/* #2: PUSATKAN KONTEN DI DALAMNYA */
 .main-content-container {
     width: 100%;
-    max-width: 1200px; /* Batasi lebar konten di dalam container ini */
+    max-width: 100VW; /* Batasi lebar konten di dalam container ini */
     margin-left: auto;
     margin-right: auto;
     padding: 1.5rem; /* Tambahkan padding di sini untuk konten */
@@ -331,12 +332,12 @@ body {
     color: var(--dm-white); /* Teks putih terang */
     padding: 10rem 0 8rem 0;
     text-align: center;
-    border-radius: 0px; 
+    border-radius: 0px;
     margin-top: 0px; /* Diatur dari body padding */
-    margin-bottom: 0px; 
+    margin-bottom: 0px;
     position: relative;
     overflow: hidden;
-    box-shadow: none; 
+    box-shadow: none;
     min-height: calc(100vh - 100px); /* Sesuaikan tinggi agar tidak menutupi navbar */
     display: flex;
     flex-direction: column;
@@ -414,7 +415,7 @@ body {
 /* Info/Features Section */
 .info-section {
     padding: 5rem 0;
-    background-color: var(--dm-dark-gray); /* Ganti agar ada latar belakang kontras */
+   /* Ganti agar ada latar belakang kontras */
     border-radius: 0px; /* Hapus border radius */
     box-shadow: none;
     margin-top: 0px; /* Tidak perlu margin top karena sudah ada shape divider */
@@ -535,7 +536,6 @@ body {
     line-height: 1.8;
 }
 
-
 /* FAQ Section */
 .faq-section {
     padding: 5rem 0;
@@ -626,12 +626,11 @@ body {
 
 /* Footer Section */
 .footer-section {
-    background-color: var(--dm-dark-gray);
+
     color: var(--dm-light-gray);
     padding: 2.5rem 0;
     margin-top: 0px; /* Sesuaikan margin */
-    border-radius: 0px;
-    border-top: 1px solid var(--dm-border-color);
+    border-radius: 50px;
     box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
     width: 100%;
 }
@@ -831,13 +830,48 @@ body {
     width: var(--dm-sidebar-collapsed-width);
 }
 
+/* TAMBAHKAN KODE BARU INI DI SINI */
+/* GAYA BARU: Indikator aktif (lingkaran) */
+#sidebar-active-indicator {
+    position: absolute; /* Posisinya absolut di dalam sidebar-nav */
+    border-radius: 50%; /* #1: Ubah dari kotak menjadi lingkaran */
+    z-index: 0; /* Posisikan di belakang link */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi yang mulus */
+    opacity: 0; /* Sembunyikan secara default */
+}
+
+/* Tampilkan indikator saat kelas 'visible' ditambahkan oleh JS */
+#sidebar-active-indicator.visible {
+    opacity: 1;
+}
+
+/* GAYA BARU: Gaya untuk hover-expanded */
+.sidebar.hover-expanded {
+    width: var(--dm-sidebar-width);
+}
+
+/* Pastikan semua elemen di dalamnya muncul saat hover-expanded */
+.sidebar.hover-expanded .app-logo,
+.sidebar.hover-expanded .sidebar-nav .nav-link span,
+.sidebar.hover-expanded .sidebar-footer {
+    opacity: 1;
+    width: auto;
+    display: flex; /* Atau block/inline-block, tergantung kebutuhan */
+}
+
+/* Atur kembali alignment ikon saat hover-expanded */
+.sidebar.hover-expanded .sidebar-nav .nav-link {
+    justify-content: flex-start;
+}
+
+/* HAPUS background dan shadow dari link aktif itu sendiri */
+
 .sidebar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
     padding-bottom: 15px;
-    border-bottom: 1px solid var(--dm-border-color);
 }
 
 .sidebar-header .app-logo {
@@ -910,7 +944,10 @@ body {
 }
 
 .sidebar.collapsed .sidebar-nav .nav-link span {
-    display: none; /* Sembunyikan teks saat collapsed */
+    opacity: 0; /* Sembunyikan teks dengan opacity */
+    width: 0; /* Lebar juga 0 */
+    overflow: hidden; /* Sembunyikan konten yang meluap */
+    transition: opacity 0.3s ease, width 0.3s ease, margin-left 0.3s ease; /* Tambahkan transisi di sini */
 }
 
 .sidebar.collapsed .sidebar-nav .nav-link {
@@ -945,18 +982,39 @@ body {
     opacity: 0.7;
 }
 
-/* NEW: Dashboard Content Styling */
+/* Responsive Adjustments */
+@media (min-width: 769px) {
+    .sidebar-toggle-btn {
+        display: block; /* Tampilkan di desktop */
+    }
+
+    /* #1: Terapkan margin default untuk konten utama, sesuai sidebar menyusut */
+
+
+    /* #2: Ubah margin saat sidebar diperluas (diklik) */
+    body.body-sidebar-expanded .main-content-area {
+        margin-left: var(--dm-sidebar-width);
+    }
+}
+
+/* NEW: Dashboard Content Styling (Desktop) */
 .dashboard-content {
-    padding: 2rem;
+    padding: 4rem; /* DIUBAH: Tingkatkan padding untuk ruang lebih luas */
     background-color: var(--dm-dashboard-bg); /* Latar belakang konten dashboard */
     border-radius: 15px;
     min-height: calc(100vh - 100px); /* Sesuaikan tinggi agar tidak terlalu pendek */
+    /* #3: Tambahkan flexbox untuk pemusatan konten di dalam container */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Pusatkan konten secara horizontal */
+    width: 100%; /* Pastikan mengambil lebar penuh parent-nya */
+    overflow-x: hidden; /* Cegah scroll horizontal */
 }
 
 .dashboard-title {
     font-size: 3.5rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem; /* DIUBAH: Kurangi jarak judul ke subtitle */
     background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -966,49 +1024,44 @@ body {
 .dashboard-subtitle {
     font-size: 1.3rem;
     color: var(--dm-light-gray);
-    margin-bottom: 3rem;
+    margin-bottom: 5rem; /* DIUBAH: Perbesar jarak subtitle ke kartu */
 }
 
 .card-section {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem; /* Jarak antar kartu */
-    margin-bottom: 3rem;
+    gap: 3.5rem; /* DIUBAH: Perbesar jarak antar kartu */
+    margin-bottom: 5rem; /* DIUBAH: Perbesar jarak ke bagian selanjutnya */
+    width: 100%;
+    max-width: 1000px; /* DITAMBAH: Batasi lebar maksimum card section */
+    justify-content: center; /* DITAMBAH: Pusatkan kartu di tengah */
 }
 
 .dashboard-info-card {
     flex: 1; /* Agar kartu membesar mengisi ruang */
-    min-width: 280px; /* Minimal lebar kartu */
+    min-width: 300px; /* DIUBAH: Minimal lebar kartu */
+    max-width: 500px; /* DITAMBAH: Maksimal lebar kartu */
     background-color: var(--dm-dark-gray) !important;
     border: 1px solid var(--dm-border-color);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    border-radius: 15px !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9); /* DIUBAH: Perkuat bayangan */
+    border-radius: 25px !important; /* DIUBAH: Perbesar border radius */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* DITAMBAH: Lebar dinamis untuk layout */
+    width: 100%; 
+    max-width: 800px; /* DIUBAH: Tingkatkan lebar maksimum card form */
 }
 
 .dashboard-info-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
-}
-
-.dashboard-info-card .card-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--dm-white);
-    margin-bottom: 0.75rem;
-}
-
-.dashboard-info-card .card-text {
-    font-size: 1.1rem;
-    color: var(--dm-light-gray);
-    margin-bottom: 1.5rem;
+    transform: translateY(-10px); /* DIUBAH: Tingkatkan efek hover */
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 1); /* DIUBAH: Perkuat bayangan saat hover */
 }
 
 .section-heading {
     font-size: 2.5rem;
     font-weight: 700;
     color: var(--dm-white);
-    margin-bottom: 2rem;
+    margin-top: 5rem; /* DIUBAH: Tambahkan margin atas untuk pemisah yang jelas */
+    margin-bottom: 2.5rem; /* DIUBAH: Tambah margin bawah */
     background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1018,26 +1071,43 @@ body {
 .todo-list-card {
     background-color: var(--dm-black) !important;
     border: 1px solid var(--dm-border-color);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    border-radius: 10px !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* DIUBAH: Perkuat bayangan */
+    border-radius: 20px !important; /* DIUBAH: Perbesar border radius */
     height: 100%; /* Penting untuk row-cols-x */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* DITAMBAH: Aturan untuk layout konten di dalamnya */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Dorong konten ke atas dan bawah */
 }
 
 .todo-list-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+    transform: translateY(-5px); /* DIUBAH: Tingkatkan efek hover */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8); /* DIUBAH: Perkuat bayangan saat hover */
+}
+
+.todo-list-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Memastikan body mengisi seluruh tinggi card */
 }
 
 .todo-list-card .card-title {
-    font-size: 1.3rem;
+    font-size: 1.4rem; /* DIUBAH: Perbesar ukuran font judul kartu */
     font-weight: 600;
     color: var(--dm-white);
+    margin-bottom: 0.5rem; /* Beri jarak ke deskripsi */
+    word-wrap: break-word; /* DITAMBAH: Memastikan judul yang panjang membungkus */
+    overflow-wrap: break-word; /* DITAMBAH: Properti yang lebih modern */
 }
 
 .todo-list-card .card-text {
-    font-size: 0.95rem;
+    font-size: 1rem; /* DIUBAH: Perbesar ukuran font teks deskripsi */
     color: var(--dm-light-gray);
+    flex-grow: 1; /* DITAMBAH: Deskripsi akan mengambil semua ruang yang tersedia */
+    margin-bottom: 1rem; /* Beri jarak ke badge dan tombol */
+    word-wrap: break-word; /* DITAMBAH: Memastikan teks deskripsi membungkus */
+    overflow-wrap: break-word;
 }
 
 /* Badges styling */
@@ -1061,11 +1131,11 @@ body {
     position: fixed;
     top: 20px; /* DIUBAH: Pindah ke atas agar tidak bentrok dengan sidebar di dashboard */
     right: 20px;
-    z-index: 1050; 
+    z-index: 1050;
     display: flex;
     flex-direction: column;
-    gap: 10px; 
-    pointer-events: none; 
+    gap: 10px;
+    pointer-events: none;
 }
 
 .custom-toast-notification {
@@ -1078,11 +1148,11 @@ body {
     min-width: 250px;
     max-width: 350px;
     font-size: 1rem;
-    opacity: 0; 
-    transform: translateX(100%); 
-    animation: slideInFromRight 0.5s ease-out forwards, fadeOut 0.5s ease-out 2.5s forwards; 
-    pointer-events: all; 
-    display: flex; 
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideInFromRight 0.5s ease-out forwards, fadeOut 0.5s ease-out 2.5s forwards;
+    pointer-events: all;
+    display: flex;
     align-items: center;
 }
 
@@ -1091,8 +1161,8 @@ body {
     box-shadow: 0 8px 20px rgba(0, 128, 0, 0.4);
 }
 .custom-toast-notification.error {
-    border-color: #8B0000; 
-    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.5); 
+    border-color: #8B0000;
+    box-shadow: 8px 20px rgba(255, 0, 0, 0.5);
 }
 .custom-toast-notification.info {
     border-color: #0056b3;
@@ -1102,125 +1172,891 @@ body {
     border-color: #8B4513;
     box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
 }
-
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    /* Navbar utama akan disembunyikan di mobile dashboard */
+    /* Navbar dan Page Content Wrapper untuk mobile */
     .navbar-custom {
-        display: none; 
+        top: 10px; /* Sedikit lebih rendah di mobile */
+        width: 90%; /* Ambil lebih banyak lebar */
+        margin: 10px auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .page-content-wrapper {
+        padding-top: 80px; /* Lebih sedikit padding di mobile untuk hero/main content */
+        flex-direction: column; /* Tumpuk sidebar di atas konten utama */
     }
 
     .page-content-wrapper.dashboard-layout {
-        flex-direction: column; /* Sidebar di atas konten utama di mobile */
+        flex-direction: column; /* Tumpuk sidebar di atas konten utama di dashboard */
+        padding-top: 0; /* Sidebar akan mengelola padding top-nya sendiri */
     }
 
     .sidebar {
         width: 100% !important; /* Sidebar mengambil lebar penuh di mobile */
-        position: relative; 
-        min-height: auto;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Shadow di bawah sidebar di mobile */
-        border-radius: 0 0 15px 15px; /* Sudut bawah membulat */
-        margin-bottom: 20px;
+        position: relative; /* Buat sidebar relatif */
+        height: auto; /* Tinggi disesuaikan dengan konten */
+        box-shadow: none;
+        border-radius: 0;
+        margin-bottom: 20px; /* Beri jarak ke konten di bawahnya */
     }
 
     .sidebar.collapsed {
         width: 100% !important;
     }
 
-    .sidebar .sidebar-header {
-        justify-content: center; /* Pusatkan header di mobile */
-        padding: 15px;
-    }
     .sidebar .app-logo {
-        opacity: 1; /* Selalu tampilkan logo di mobile sidebar */
-        width: auto;
-        font-size: 1.5rem;
+        display: block; /* Selalu tampilkan logo di mobile */
+        text-align: center;
+        width: 100%;
     }
+
     .sidebar .sidebar-toggle-btn {
-        display: none; /* Tombol toggle bisa disembunyikan di mobile jika sidebar selalu terbuka */
+        position: absolute;
+        right: 15px;
+        top: 15px;
     }
 
     .sidebar-nav ul {
-        flex-direction: column;
+        flex-direction: column; /* Tumpuk item navigasi */
+        padding: 0;
+    }
+
+    .sidebar-nav .nav-item {
+        margin: 0;
+        width: 100%;
+    }
+
+    .sidebar-nav .nav-link {
+        padding: 0.8rem 1rem !important;
+        justify-content: flex-start;
+        border-radius: 0; /* Hapus border radius di mobile sidebar */
     }
 
     .sidebar-nav .nav-link span {
         display: inline-block !important; /* Selalu tampilkan teks di mobile sidebar */
         margin-left: 10px;
     }
-
-    .sidebar.collapsed .sidebar-nav .nav-link span {
-        display: inline-block !important; /* Pastikan teks tetap terlihat di mobile collapsed */
-    }
-
-    .sidebar-footer {
-        opacity: 1; /* Selalu tampilkan footer di mobile */
-        height: auto;
-        padding-top: 15px;
-        border-top: 1px solid var(--dm-border-color);
+    .sidebar-nav .nav-link i {
+        min-width: 25px; /* Pastikan ikon tetap rapi */
     }
 
     .main-content-area {
-        margin-left: 0 !important; /* Pastikan tidak ada margin kiri di mobile */
-        min-height: auto; /* Biarkan tinggi menyesuaikan konten */
+        margin-left: 0 !important; /* Hapus margin left di mobile */
+        width: 100%;
     }
 
-    .dashboard-title {
+    .hero-section h1 {
+        font-size: 3rem;
+    }
+
+    .hero-section .main-title {
+        font-size: 4rem;
+    }
+
+    .hero-section .subtitle {
+        font-size: 1.2rem;
+    }
+
+    .btn-hero {
+        font-size: 1rem;
+        padding: 0.7rem 1.8rem;
+    }
+
+    .info-section h3,
+    .about-section h3,
+    .faq-section h3 {
         font-size: 2.5rem;
     }
 
-    .dashboard-subtitle {
+    .feature-item {
+        padding: 1.5rem;
+    }
+
+    .feature-item .icon {
+        font-size: 3.5rem;
+    }
+    .feature-item .icon svg {
+        width: 50px;
+        height: 50px;
+    }
+
+    .feature-item h4 {
+        font-size: 1.5rem;
+    }
+
+    .feature-item p {
         font-size: 1rem;
     }
 
-    .card-section {
-        flex-direction: column; /* Tumpuk kartu di mobile */
-        gap: 1.5rem;
-    }
-    .dashboard-info-card {
-        min-width: unset; /* Hapus min-width di mobile */
+    .about-section p {
+        font-size: 1rem;
     }
 
-    .section-heading {
-        font-size: 2rem;
+    .accordion-button {
+        padding: 0.8rem 1rem !important;
+        font-size: 0.95rem;
     }
-
-    .todo-list-card .card-title {
-        font-size: 1.1rem;
-    }
-    .todo-list-card .card-text {
-        font-size: 0.85rem;
+    .accordion-body {
+        padding: 1rem !important;
+        font-size: 0.9rem;
     }
 
     /* Toast notification for mobile */
     #toast-notification-container {
-        top: 20px; /* Kembali ke atas untuk mobile */
+        top: 80px; /* Adjust position for mobile */
         right: 10px;
-        left: 10px; 
+        left: 10px; /* Centered with a bit of margin */
         width: auto;
     }
     .custom-toast-notification {
         min-width: unset;
-        max-width: 95%; 
-        margin: 0 auto; 
+        max-width: 95%; /* Adjust width for mobile */
+        margin: 0 auto; /* Center toast horizontally */
     }
 }
 
-/* NEW: Sidebar Toggle Button (for desktop) */
-.sidebar-toggle-btn {
-    display: none; /* Sembunyikan default, hanya tampil di desktop untuk toggle */
+/* NEW: Sidebar Styling */
+.sidebar {
+    width: var(--dm-sidebar-width);
+    background-color: var(--dm-sidebar-bg);
+    padding: 20px;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.7);
+    transition: all 0.3s ease;
+    min-height: 100vh; /* Memastikan sidebar setinggi viewport */
+    display: flex;
+    flex-direction: column;
+    position: sticky; /* Tetap di viewport saat scroll */
+    top: 0; /* Tetapkan di bagian atas */
+    left: 0; /* Tetapkan di kiri */
+    z-index: 1020; /* Di bawah navbar utama */
 }
+
+.sidebar.collapsed {
+    width: var(--dm-sidebar-collapsed-width);
+}
+
+/* TAMBAHKAN KODE BARU INI DI SINI */
+/* GAYA BARU: Indikator aktif (lingkaran) */
+#sidebar-active-indicator {
+    position: absolute; /* Posisinya absolut di dalam sidebar-nav */
+    border-radius: 50%; /* #1: Ubah dari kotak menjadi lingkaran */
+    z-index: 0; /* Posisikan di belakang link */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi yang mulus */
+    opacity: 0; /* Sembunyikan secara default */
+}
+
+/* Tampilkan indikator saat kelas 'visible' ditambahkan oleh JS */
+#sidebar-active-indicator.visible {
+    opacity: 1;
+}
+
+/* GAYA BARU: Gaya untuk hover-expanded */
+.sidebar.hover-expanded {
+    width: var(--dm-sidebar-width);
+}
+
+/* Pastikan semua elemen di dalamnya muncul saat hover-expanded */
+.sidebar.hover-expanded .app-logo,
+.sidebar.hover-expanded .sidebar-nav .nav-link span,
+.sidebar.hover-expanded .sidebar-footer {
+    opacity: 1;
+    width: auto;
+    display: flex; /* Atau block/inline-block, tergantung kebutuhan */
+}
+
+/* Atur kembali alignment ikon saat hover-expanded */
+.sidebar.hover-expanded .sidebar-nav .nav-link {
+    justify-content: flex-start;
+}
+
+/* HAPUS background dan shadow dari link aktif itu sendiri */
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+}
+
+.sidebar-header .app-logo {
+    color: var(--dm-white);
+    font-size: 1.8rem;
+    font-weight: 800;
+    white-space: nowrap; /* Cegah teks logo pecah */
+    overflow: hidden; /* Sembunyikan jika sidebar collap */
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .app-logo {
+    opacity: 0;
+    width: 0;
+}
+
+.sidebar-toggle-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--dm-light-gray);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+    color: var(--dm-accent-blue);
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav .nav-item {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    color: var(--dm-light-gray);
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar-nav .nav-link:hover {
+    background-color: var(--dm-nav-item-hover-bg);
+    color: var(--dm-white);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-nav .nav-link.active {
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    color: var(--dm-white);
+    box-shadow: 0 4px 15px var(--dm-active-shadow-color);
+}
+
+.sidebar-nav .nav-link i {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    min-width: 25px; /* Pastikan ikon tidak bergeser */
+    text-align: center;
+}
+
+.sidebar.collapsed .sidebar-nav .nav-link span {
+    opacity: 0; /* Sembunyikan teks dengan opacity */
+    width: 0; /* Lebar juga 0 */
+    overflow: hidden; /* Sembunyikan konten yang meluap */
+    transition: opacity 0.3s ease, width 0.3s ease, margin-left 0.3s ease; /* Tambahkan transisi di sini */
+}
+
+.sidebar.collapsed .sidebar-nav .nav-link {
+    justify-content: center; /* Pusatkan ikon saat collapsed */
+    padding: 12px 0; /* Sesuaikan padding */
+}
+
+.sidebar-footer {
+    margin-top: auto; /* Dorong footer ke bawah */
+    padding-top: 20px;
+    border-top: 1px solid var(--dm-border-color);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-footer {
+    opacity: 0;
+    height: 0; /* Sembunyikan footer saat collapsed */
+    padding-top: 0;
+    border-top: none;
+}
+
+.sidebar-footer p {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: var(--dm-light-gray);
+}
+.sidebar-footer .user-id {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Responsive Adjustments */
 @media (min-width: 769px) {
     .sidebar-toggle-btn {
         display: block; /* Tampilkan di desktop */
     }
 
-    /* Adjust main content area based on sidebar state */
-    .page-content-wrapper.dashboard-layout .main-content-area {
-        margin-left: var(--dm-sidebar-width); /* Default margin saat sidebar terbuka */
+    /* #1: Terapkan margin default untuk konten utama, sesuai sidebar menyusut */
+
+
+    /* #2: Ubah margin saat sidebar diperluas (diklik) */
+    body.body-sidebar-expanded .main-content-area {
+        margin-left: var(--dm-sidebar-width);
+    }
+<<<<<<< HEAD
+=======
+}
+
+/* NEW: Dashboard Content Styling (Desktop) */
+.dashboard-content {
+    padding: 4rem; /* DIUBAH: Tingkatkan padding untuk ruang lebih luas */
+    background-color: var(--dm-dashboard-bg); /* Latar belakang konten dashboard */
+    border-radius: 15px;
+    min-height: calc(100vh - 100px); /* Sesuaikan tinggi agar tidak terlalu pendek */
+    /* #3: Tambahkan flexbox untuk pemusatan konten di dalam container */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Pusatkan konten secara horizontal */
+    width: 100%; /* Pastikan mengambil lebar penuh parent-nya */
+    overflow-x: hidden; /* Cegah scroll horizontal */
+}
+
+.dashboard-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem; /* DIUBAH: Kurangi jarak judul ke subtitle */
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 3px 10px rgba(0, 123, 255, 0.2);
+}
+
+.dashboard-subtitle {
+    font-size: 1.3rem;
+    color: var(--dm-light-gray);
+    margin-bottom: 5rem; /* DIUBAH: Perbesar jarak subtitle ke kartu */
+}
+
+.card-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3.5rem; /* DIUBAH: Perbesar jarak antar kartu */
+    margin-bottom: 5rem; /* DIUBAH: Perbesar jarak ke bagian selanjutnya */
+    width: 100%;
+    max-width: 1000px; /* DITAMBAH: Batasi lebar maksimum card section */
+    justify-content: center; /* DITAMBAH: Pusatkan kartu di tengah */
+}
+
+.dashboard-info-card {
+    flex: 1; /* Agar kartu membesar mengisi ruang */
+    min-width: 300px; /* DIUBAH: Minimal lebar kartu */
+    max-width: 500px; /* DITAMBAH: Maksimal lebar kartu */
+    background-color: var(--dm-dark-gray) !important;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9); /* DIUBAH: Perkuat bayangan */
+    border-radius: 25px !important; /* DIUBAH: Perbesar border radius */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* DITAMBAH: Lebar dinamis untuk layout */
+    width: 100%; 
+    max-width: 800px; /* DIUBAH: Tingkatkan lebar maksimum card form */
+}
+
+.dashboard-info-card:hover {
+    transform: translateY(-10px); /* DIUBAH: Tingkatkan efek hover */
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 1); /* DIUBAH: Perkuat bayangan saat hover */
+}
+
+.section-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dm-white);
+    margin-top: 5rem; /* DIUBAH: Tambahkan margin atas untuk pemisah yang jelas */
+    margin-bottom: 2.5rem; /* DIUBAH: Tambah margin bawah */
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.todo-list-card {
+    background-color: var(--dm-black) !important;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* DIUBAH: Perkuat bayangan */
+    border-radius: 20px !important; /* DIUBAH: Perbesar border radius */
+    height: 100%; /* Penting untuk row-cols-x */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* DITAMBAH: Aturan untuk layout konten di dalamnya */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Dorong konten ke atas dan bawah */
+}
+
+.todo-list-card:hover {
+    transform: translateY(-5px); /* DIUBAH: Tingkatkan efek hover */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8); /* DIUBAH: Perkuat bayangan saat hover */
+}
+
+.todo-list-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Memastikan body mengisi seluruh tinggi card */
+    padding-bottom: 1rem; /* Tambahkan padding di bagian bawah agar tidak terlalu mepet */
+}
+
+.todo-list-card .card-title {
+    font-size: 1.4rem; /* DIUBAH: Perbesar ukuran font judul kartu */
+    font-weight: 600;
+    color: var(--dm-white);
+    margin-bottom: 0.5rem; /* Beri jarak ke deskripsi */
+    word-wrap: break-word; /* DITAMBAH: Memastikan judul yang panjang membungkus */
+    overflow-wrap: break-word; /* DITAMBAH: Properti yang lebih modern */
+}
+
+.todo-list-card .card-text {
+    font-size: 1rem; /* DIUBAH: Perbesar ukuran font teks deskripsi */
+    color: var(--dm-light-gray);
+    flex-grow: 1; /* DITAMBAH: Deskripsi akan mengambil semua ruang yang tersedia */
+    margin-bottom: 1rem; /* Beri jarak ke badge dan tombol */
+    word-wrap: break-word; /* DITAMBAH: Memastikan teks deskripsi membungkus */
+    overflow-wrap: break-word;
+}
+
+/* Badges styling */
+.badge {
+    padding: 0.5em 0.8em;
+    border-radius: 5px;
+    font-weight: 600;
+}
+.badge.bg-primary {
+    background-color: var(--dm-accent-blue) !important;
+}
+.badge.bg-success {
+    background-color: #28a745 !important; /* Green */
+}
+.badge.bg-info {
+    background-color: var(--dm-accent-purple) !important;
+}
+
+/* Notifikasi Toast - Styling sudah ada dari sebelumnya, memastikan konsisten */
+#toast-notification-container {
+    position: fixed;
+    top: 20px; /* DIUBAH: Pindah ke atas agar tidak bentrok dengan sidebar di dashboard */
+    right: 20px;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.custom-toast-notification {
+    background-color: var(--dm-dark-gray);
+    color: var(--dm-white);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    min-width: 250px;
+    max-width: 350px;
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideInFromRight 0.5s ease-out forwards, fadeOut 0.5s ease-out 2.5s forwards;
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+}
+
+.custom-toast-notification.success {
+    border-color: #008000;
+    box-shadow: 0 8px 20px rgba(0, 128, 0, 0.4);
+}
+.custom-toast-notification.error {
+    border-color: #8B0000;
+    box-shadow: 8px 20px rgba(255, 0, 0, 0.5);
+}
+.custom-toast-notification.info {
+    border-color: #0056b3;
+    box-shadow: 0 8px 20px rgba(0, 56, 116, 0.4);
+}
+.custom-toast-notification.warning {
+    border-color: #8B4513;
+    box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
+}
+/* Responsive Adjustments */
+@media (min-width: 769px) {
+    .sidebar-toggle-btn {
+        display: block; /* Tampilkan di desktop */
     }
 
-    .page-content-wrapper.dashboard-layout.sidebar-collapsed .main-content-area {
-        margin-left: var(--dm-sidebar-collapsed-width); /* Margin saat sidebar ciut */
+    /* #1: Terapkan margin default untuk konten utama, sesuai sidebar menyusut */
+
+
+    /* #2: Ubah margin saat sidebar diperluas (diklik) */
+    body.body-sidebar-expanded .main-content-area {
+        margin-left: var(--dm-sidebar-width);
     }
+}
+
+/* NEW: Sidebar Styling */
+.sidebar {
+    width: var(--dm-sidebar-width);
+    background-color: var(--dm-sidebar-bg);
+    padding: 20px;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.7);
+    transition: all 0.3s ease;
+    min-height: 100vh; /* Memastikan sidebar setinggi viewport */
+    display: flex;
+    flex-direction: column;
+    position: sticky; /* Tetap di viewport saat scroll */
+    top: 0; /* Tetapkan di bagian atas */
+    left: 0; /* Tetapkan di kiri */
+    z-index: 1020; /* Di bawah navbar utama */
+}
+
+.sidebar.collapsed {
+    width: var(--dm-sidebar-collapsed-width);
+}
+
+/* TAMBAHKAN KODE BARU INI DI SINI */
+/* GAYA BARU: Indikator aktif (lingkaran) */
+#sidebar-active-indicator {
+    position: absolute; /* Posisinya absolut di dalam sidebar-nav */
+    border-radius: 50%; /* #1: Ubah dari kotak menjadi lingkaran */
+    z-index: 0; /* Posisikan di belakang link */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transisi yang mulus */
+    opacity: 0; /* Sembunyikan secara default */
+}
+
+/* Tampilkan indikator saat kelas 'visible' ditambahkan oleh JS */
+#sidebar-active-indicator.visible {
+    opacity: 1;
+}
+
+/* GAYA BARU: Gaya untuk hover-expanded */
+.sidebar.hover-expanded {
+    width: var(--dm-sidebar-width);
+}
+
+/* Pastikan semua elemen di dalamnya muncul saat hover-expanded */
+.sidebar.hover-expanded .app-logo,
+.sidebar.hover-expanded .sidebar-nav .nav-link span,
+.sidebar.hover-expanded .sidebar-footer {
+    opacity: 1;
+    width: auto;
+    display: flex; /* Atau block/inline-block, tergantung kebutuhan */
+}
+
+/* Atur kembali alignment ikon saat hover-expanded */
+.sidebar.hover-expanded .sidebar-nav .nav-link {
+    justify-content: flex-start;
+}
+
+/* HAPUS background dan shadow dari link aktif itu sendiri */
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+}
+
+.sidebar-header .app-logo {
+    color: var(--dm-white);
+    font-size: 1.8rem;
+    font-weight: 800;
+    white-space: nowrap; /* Cegah teks logo pecah */
+    overflow: hidden; /* Sembunyikan jika sidebar collap */
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .app-logo {
+    opacity: 0;
+    width: 0;
+}
+
+.sidebar-toggle-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--dm-light-gray);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+    color: var(--dm-accent-blue);
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav .nav-item {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    color: var(--dm-light-gray);
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar-nav .nav-link:hover {
+    background-color: var(--dm-nav-item-hover-bg);
+    color: var(--dm-white);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-nav .nav-link.active {
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    color: var(--dm-white);
+    box-shadow: 0 4px 15px var(--dm-active-shadow-color);
+}
+
+.sidebar-nav .nav-link i {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    min-width: 25px; /* Pastikan ikon tidak bergeser */
+    text-align: center;
+}
+
+.sidebar.collapsed .sidebar-nav .nav-link span {
+    opacity: 0; /* Sembunyikan teks dengan opacity */
+    width: 0; /* Lebar juga 0 */
+    overflow: hidden; /* Sembunyikan konten yang meluap */
+    transition: opacity 0.3s ease, width 0.3s ease, margin-left 0.3s ease; /* Tambahkan transisi di sini */
+}
+
+.sidebar.collapsed .sidebar-nav .nav-link {
+    justify-content: center; /* Pusatkan ikon saat collapsed */
+    padding: 12px 0; /* Sesuaikan padding */
+}
+
+.sidebar-footer {
+    margin-top: auto; /* Dorong footer ke bawah */
+    padding-top: 20px;
+    border-top: 1px solid var(--dm-border-color);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-footer {
+    opacity: 0;
+    height: 0; /* Sembunyikan footer saat collapsed */
+    padding-top: 0;
+    border-top: none;
+}
+
+.sidebar-footer p {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: var(--dm-light-gray);
+}
+.sidebar-footer .user-id {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 769px) {
+    .sidebar-toggle-btn {
+        display: block; /* Tampilkan di desktop */
+    }
+
+    /* #1: Terapkan margin default untuk konten utama, sesuai sidebar menyusut */
+
+
+    /* #2: Ubah margin saat sidebar diperluas (diklik) */
+    body.body-sidebar-expanded .main-content-area {
+        margin-left: var(--dm-sidebar-width);
+    }
+}
+
+/* NEW: Dashboard Content Styling (Desktop) */
+.dashboard-content {
+    padding: 4rem; /* DIUBAH: Tingkatkan padding untuk ruang lebih luas */
+    background-color: var(--dm-dashboard-bg); /* Latar belakang konten dashboard */
+    border-radius: 15px;
+    min-height: calc(100vh - 100px); /* Sesuaikan tinggi agar tidak terlalu pendek */
+    /* #3: Tambahkan flexbox untuk pemusatan konten di dalam container */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Pusatkan konten secara horizontal */
+    width: 100%; /* Pastikan mengambil lebar penuh parent-nya */
+    overflow-x: hidden; /* Cegah scroll horizontal */
+}
+
+.dashboard-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem; /* DIUBAH: Kurangi jarak judul ke subtitle */
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 3px 10px rgba(0, 123, 255, 0.2);
+}
+
+.dashboard-subtitle {
+    font-size: 1.3rem;
+    color: var(--dm-light-gray);
+    margin-bottom: 5rem; /* DIUBAH: Perbesar jarak subtitle ke kartu */
+}
+
+.card-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3.5rem; /* DIUBAH: Perbesar jarak antar kartu */
+    margin-bottom: 5rem; /* DIUBAH: Perbesar jarak ke bagian selanjutnya */
+    width: 100%;
+    max-width: 1000px; /* DITAMBAH: Batasi lebar maksimum card section */
+    justify-content: center; /* DITAMBAH: Pusatkan kartu di tengah */
+}
+
+.dashboard-info-card {
+    flex: 1; /* Agar kartu membesar mengisi ruang */
+    min-width: 300px; /* DIUBAH: Minimal lebar kartu */
+    max-width: 500px; /* DITAMBAH: Maksimal lebar kartu */
+    background-color: var(--dm-dark-gray) !important;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9); /* DIUBAH: Perkuat bayangan */
+    border-radius: 25px !important; /* DIUBAH: Perbesar border radius */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* DITAMBAH: Lebar dinamis untuk layout */
+    width: 100%; 
+    max-width: 800px; /* DIUBAH: Tingkatkan lebar maksimum card form */
+}
+
+.dashboard-info-card:hover {
+    transform: translateY(-10px); /* DIUBAH: Tingkatkan efek hover */
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 1); /* DIUBAH: Perkuat bayangan saat hover */
+}
+
+.section-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dm-white);
+    margin-top: 5rem; /* DIUBAH: Tambahkan margin atas untuk pemisah yang jelas */
+    margin-bottom: 2.5rem; /* DIUBAH: Tambah margin bawah */
+    background: linear-gradient(to right, var(--dm-gradient-start), var(--dm-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.todo-list-card {
+    background-color: var(--dm-black) !important;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* DIUBAH: Perkuat bayangan */
+    border-radius: 20px !important; /* DIUBAH: Perbesar border radius */
+    height: 100%; /* Penting untuk row-cols-x */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* DITAMBAH: Aturan untuk layout konten di dalamnya */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Dorong konten ke atas dan bawah */
+}
+
+.todo-list-card:hover {
+    transform: translateY(-5px); /* DIUBAH: Tingkatkan efek hover */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8); /* DIUBAH: Perkuat bayangan saat hover */
+}
+
+.todo-list-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Memastikan body mengisi seluruh tinggi card */
+    padding-bottom: 1rem; /* Tambahkan padding di bagian bawah agar tidak terlalu mepet */
+}
+
+.todo-list-card .card-title {
+    font-size: 1.4rem; /* DIUBAH: Perbesar ukuran font judul kartu */
+    font-weight: 600;
+    color: var(--dm-white);
+    margin-bottom: 0.5rem; /* Beri jarak ke deskripsi */
+    word-wrap: break-word; /* DITAMBAH: Memastikan judul yang panjang membungkus */
+    overflow-wrap: break-word; /* DITAMBAH: Properti yang lebih modern */
+}
+
+.todo-list-card .card-text {
+    font-size: 1rem; /* DIUBAH: Perbesar ukuran font teks deskripsi */
+    color: var(--dm-light-gray);
+    flex-grow: 1; /* DITAMBAH: Deskripsi akan mengambil semua ruang yang tersedia */
+    margin-bottom: 1rem; /* Beri jarak ke badge dan tombol */
+    word-wrap: break-word; /* DITAMBAH: Memastikan teks deskripsi membungkus */
+    overflow-wrap: break-word;
+}
+
+/* Badges styling */
+.badge {
+    padding: 0.5em 0.8em;
+    border-radius: 5px;
+    font-weight: 600;
+}
+.badge.bg-primary {
+    background-color: var(--dm-accent-blue) !important;
+}
+.badge.bg-success {
+    background-color: #28a745 !important; /* Green */
+}
+.badge.bg-info {
+    background-color: var(--dm-accent-purple) !important;
+}
+
+/* Notifikasi Toast - Styling sudah ada dari sebelumnya, memastikan konsisten */
+#toast-notification-container {
+    position: fixed;
+    top: 20px; /* DIUBAH: Pindah ke atas agar tidak bentrok dengan sidebar di dashboard */
+    right: 20px;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.custom-toast-notification {
+    background-color: var(--dm-dark-gray);
+    color: var(--dm-white);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--dm-border-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    min-width: 250px;
+    max-width: 350px;
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideInFromRight 0.5s ease-out forwards, fadeOut 0.5s ease-out 2.5s forwards;
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+}
+
+.custom-toast-notification.success {
+    border-color: #008000;
+    box-shadow: 0 8px 20px rgba(0, 128, 0, 0.4);
+}
+.custom-toast-notification.error {
+    border-color: #8B0000;
+    box-shadow: 8px 20px rgba(255, 0, 0, 0.5);
+}
+.custom-toast-notification.info {
+    border-color: #0056b3;
+    box-shadow: 0 8px 20px rgba(0, 56, 116, 0.4);
+}
+.custom-toast-notification.warning {
+    border-color: #8B4513;
+    box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
 }

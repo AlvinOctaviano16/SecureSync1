@@ -53,6 +53,7 @@
         </button>
     </div>
     <nav class="sidebar-nav">
+      <div id="sidebar-active-indicator"></div>
         <ul class="list-unstyled">
             <li class="nav-item">
                 <a href="{{ url_for('main.dashboard') }}" class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}">
