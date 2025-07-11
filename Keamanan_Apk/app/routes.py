@@ -22,42 +22,42 @@ def login_register():
 
 @main_bp.route("/process_login", methods=['POST'])
 def process_login():
-    print("DEBUG: Fungsi process_login diakses.") # DEBUG 1
+    print("DEBUG: Fungsi process_login diakses.")
     if current_user.is_authenticated:
-        print("DEBUG: User sudah terautentikasi, redirect ke dashboard.") # DEBUG 2
+        print("DEBUG: User sudah terautentikasi, redirect ke dashboard.")
         return redirect(url_for('main.dashboard'))
     
     username = request.form.get('username')
     password = request.form.get('password')
-    print(f"DEBUG: Menerima username: '{username}', password (sebagian): '{password[:3]}...'") # DEBUG 3
+    print(f"DEBUG: Menerima username: '{username}', password (sebagian): '{password[:3]}...'")
 
     user = User.query.filter_by(username=username).first()
     
     if user:
-        print(f"DEBUG: User '{username}' ditemukan di database.") # DEBUG 4
+        print(f"DEBUG: User '{username}' ditemukan di database.")
         if user.check_password(password):
-            print("DEBUG: Password cocok. Melakukan login user.") # DEBUG 5
+            print("DEBUG: Password cocok. Melakukan login user.")
             login_user(user)
             log = ActivityLog(user_id=user.id, action='user_logged_in', details=f"Pengguna '{username}' login.")
             db.session.add(log)
             db.session.commit()
             flash(f'Selamat datang, {user.username}! Login berhasil.', 'success')
-            print("DEBUG: Flash message sukses dan redirect ke dashboard.") # DEBUG 6
+            print("DEBUG: Flash message sukses dan redirect ke dashboard.")
             return redirect(url_for('main.dashboard'))
         else:
-            print("DEBUG: Password tidak cocok.") # DEBUG 7
+            print("DEBUG: Password tidak cocok.")
             flash('Login gagal. Periksa username dan password.', 'danger')
             return redirect(url_for('main.login_register', form='login'))
     else:
-        print(f"DEBUG: User '{username}' tidak ditemukan.") # DEBUG 8
+        print(f"DEBUG: User '{username}' tidak ditemukan.")
         flash('Login gagal. Periksa username dan password.', 'danger')
         return redirect(url_for('main.login_register', form='login'))
 
 @main_bp.route("/process_register", methods=['POST'])
 def process_register():
-    print("DEBUG: Fungsi process_register diakses.") # DEBUG 1
+    print("DEBUG: Fungsi process_register diakses.")
     if current_user.is_authenticated:
-        print("DEBUG: User sudah terautentikasi, redirect ke dashboard (register).") # DEBUG 2
+        print("DEBUG: User sudah terautentikasi, redirect ke dashboard (register).")
         return redirect(url_for('main.dashboard'))
         
     username = request.form.get('username')
@@ -65,15 +65,15 @@ def process_register():
     confirm_password = request.form.get('confirm_password')
     
     if not username or not password or not confirm_password:
-        print("DEBUG: Ada kolom kosong saat register.") # DEBUG 3
+        print("DEBUG: Ada kolom kosong saat register.")
         flash('Semua kolom wajib diisi!', 'danger')
     elif password != confirm_password:
-        print("DEBUG: Konfirmasi password tidak cocok (register).") # DEBUG 4
+        print("DEBUG: Konfirmasi password tidak cocok (register).")
         flash('Konfirmasi password tidak cocok!', 'danger')
     else:
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
-            print(f"DEBUG: Username '{username}' sudah ada (register).") # DEBUG 5
+            print(f"DEBUG: Username '{username}' sudah ada (register).")
             flash('Username sudah ada. Silakan pilih yang lain.', 'danger')
         else:
             user = User(username=username)
@@ -84,7 +84,7 @@ def process_register():
             db.session.add(log)
             db.session.commit()
             flash('Akun Anda telah dibuat! Silakan login.', 'success')
-            print(f"DEBUG: User '{username}' berhasil didaftarkan. Redirect ke login.") # DEBUG 6
+            print(f"DEBUG: User '{username}' berhasil didaftarkan. Redirect ke login.")
             return redirect(url_for('main.login_register', form='login'))
         
     return redirect(url_for('main.login_register', form='register'))
@@ -135,10 +135,11 @@ def shared_todo_lists():
 def create_todo():
     if request.method == 'POST':
         todo_name = request.form.get('name')
+        todo_description = request.form.get('description')
         if not todo_name:
             flash('Nama To-Do List tidak boleh kosong!', 'danger')
         else:
-            new_todo = ToDoList(name=todo_name, owner=current_user)
+            new_todo = ToDoList(name=todo_name, description=todo_description, owner=current_user)
             db.session.add(new_todo)
             db.session.commit()
             log = ActivityLog(user_id=current_user.id, action='create_todo', details=f"Membuat To-Do List '{todo_name}' (ID: {new_todo.id}).")
@@ -271,7 +272,11 @@ def share_todo(todo_id):
                 else:
                     flash(f'Pengguna "{username_to_share}" sudah menjadi anggota To-Do List ini dengan izin yang sama.', 'warning')
             else:
+
                # routes.py: ganti baris 274 dengan ini
+
+                # KODE YANG DIKOREKSI: Menggunakan todo_list_id alih-alih todo_list
+
                 new_member = ToDoListMember(todo_list_id=todo_list.id, user_id=user_to_share.id, permission_level=permission_level)
                 db.session.add(new_member)
                 db.session.commit()
